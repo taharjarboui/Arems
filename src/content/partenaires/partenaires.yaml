@@ -1,8 +1,73 @@
 # Partenaires de l’association : une entrée par partenaire, logo dans public/images/partenaires/.
-# Exemple :
-# - id: commune-de-sousse
-#   nom: Commune de Sousse
-#   logo: /images/partenaires/commune-de-sousse.webp
-#   url: https://www.example.org
-#   aCompleter: true
-[]
+# Logos repris de l’ancien site et identifiés visuellement ; `aCompleter: true` = nom à confirmer.
+- id: crda-sousse
+  nom: "CRDA de Sousse"
+  logo: /images/partenaires/crda-sousse.webp
+  order: 10
+  aCompleter: true
+- id: medwet
+  nom: "MedWet (Initiative pour les zones humides méditerranéennes)"
+  logo: /images/partenaires/medwet.webp
+  url: https://medwet.org
+  order: 11
+- id: jci-hergla
+  nom: "JCI Hergla"
+  logo: /images/partenaires/jci-hergla.webp
+  order: 12
+- id: partenaire-04
+  nom: "Partenaire à identifier"
+  logo: /images/partenaires/partenaire-04.webp
+  order: 13
+  aCompleter: true
+- id: partenaire-05
+  nom: "Partenaire à identifier"
+  logo: /images/partenaires/partenaire-05.webp
+  order: 14
+  aCompleter: true
+- id: forets-tunisie
+  nom: "Direction générale des forêts"
+  logo: /images/partenaires/forets-tunisie.webp
+  order: 15
+  aCompleter: true
+- id: isa-chott-mariem
+  nom: "Institut supérieur agronomique de Chott-Mariem"
+  logo: /images/partenaires/isa-chott-mariem.webp
+  order: 16
+- id: partenaire-08
+  nom: "Partenaire à identifier"
+  logo: /images/partenaires/partenaire-08.webp
+  order: 17
+  aCompleter: true
+- id: commune-de-sousse
+  nom: "Commune de Sousse"
+  logo: /images/partenaires/commune-de-sousse.webp
+  order: 18
+  aCompleter: true
+- id: marie-curie
+  nom: "Marie Curie"
+  logo: /images/partenaires/marie-curie.webp
+  order: 19
+  aCompleter: true
+- id: ppi-oscan
+  nom: "PPI-OSCAN (Programme de petites initiatives)"
+  logo: /images/partenaires/ppi-oscan.webp
+  order: 20
+- id: ffem
+  nom: "Fonds français pour l’environnement mondial"
+  logo: /images/partenaires/ffem.webp
+  url: https://www.ffem.fr
+  order: 21
+- id: ofb
+  nom: "Office français de la biodiversité"
+  logo: /images/partenaires/ofb.webp
+  url: https://www.ofb.gouv.fr
+  order: 22
+- id: mava
+  nom: "Fondation MAVA"
+  logo: /images/partenaires/mava.webp
+  order: 23
+- id: uicn
+  nom: "UICN"
+  logo: /images/partenaires/uicn.webp
+  url: https://www.iucn.org
+  order: 24

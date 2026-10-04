@@ -1,0 +1,30 @@
+---
+title: "Sentier de la Sebkhet Halk El Menzel"
+summary: "Découverte de l’écosystème unique de cette sebkha, habitat crucial pour les oiseaux migrateurs et la flore halophile."
+site: "halk-el-menzel"
+image: "/images/sentiers/sentier-halk-el-menzel-plan.webp"
+imageAlt: "Plan du sentier de la Sebkhet Halk El Menzel"
+points:
+  - titre: "Départ"
+    description: "Le sentier commence au point A, représentant l’entrée du site Ramsar de Sebkha Halk El Menzel. Une première signalétique informe les visiteurs de l’importance écologique du site et de son rôle dans la conservation des zones humides."
+    image: "/images/sentiers/circuit-oued-soud-4.webp"
+    imageAlt: "Départ"
+  - titre: "Zone de reboisement"
+    description: "Le parcours passe par une zone de reboisement où les visiteurs peuvent observer des espèces locales comme le tamaris et le casuarina. Cette zone a été restaurée après un nettoyage de 5400 m² et un périmètre reboisé de 300 mètres."
+    image: "/images/sentiers/sentier-halk-el-menzel-2.webp"
+    imageAlt: "Zone de reboisement"
+  - titre: "Passage du cours d’eau"
+    description: "Ce tronçon traverse un cours d’eau se déversant dans la sebkha principale. C’est l’occasion pour les visiteurs de comprendre l’hydrologie locale et l’importance de ces systèmes pour la régulation de l’eau."
+    image: "/images/sentiers/sentier-halk-el-menzel-3.webp"
+    imageAlt: "Passage du cours d’eau"
+  - titre: "Arrivée"
+    description: "La visite se termine au point B avec un panneau explicatif sur la faune et la flore locales. Les informations fournies permettent de mieux comprendre l’écosystème unique de la sebkha."
+    image: "/images/sentiers/sentier-halk-el-menzel-4.webp"
+    imageAlt: "Arrivée"
+  - titre: "Observatoire d’oiseaux"
+    description: "Une plateforme d’observation permet de voir diverses espèces d’oiseaux selon la saison. Le site est un lieu de repos important pour les oiseaux migrateurs. On peut observer des flamants, hérons, canards et autres espèces aquatiques."
+    image: "/images/sentiers/sentier-halk-el-menzel-5.webp"
+    imageAlt: "Observatoire d’oiseaux"
+order: 10
+aCompleter: true # durée, distance et position des points 2, 3 et 5 à fournir ; ordre des points à vérifier (l’observatoire vient après l’arrivée dans l’ancien site)
+---

@@ -1,0 +1,337 @@
+[
+  {
+    "kind": "image",
+    "from": "public/images/coot.jpeg",
+    "to": "public/images/especes/foulque-macroule.webp"
+  },
+  {
+    "kind": "son",
+    "from": "public/sons/atra.wav",
+    "to": "public/sons/foulque-macroule.mp3"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/mallard.jpeg",
+    "to": "public/images/especes/canard-colvert.webp"
+  },
+  {
+    "kind": "son",
+    "from": "public/sons/ducks.wav",
+    "to": "public/sons/canard-colvert.mp3"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/spatule.jpeg",
+    "to": "public/images/especes/spatule-blanche.webp"
+  },
+  {
+    "kind": "son",
+    "from": "public/sons/spatula.mp3",
+    "to": "public/sons/spatule-blanche.mp3"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/flammant.jpeg",
+    "to": "public/images/especes/flamant-rose.webp"
+  },
+  {
+    "kind": "son",
+    "from": "public/sons/flamingo.mp3",
+    "to": "public/sons/flamant-rose.mp3"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/avocette.jpeg",
+    "to": "public/images/especes/avocette-elegante.webp"
+  },
+  {
+    "kind": "son",
+    "from": "public/sons/Recurvirostra.wav",
+    "to": "public/sons/avocette-elegante.mp3"
+  },
+  {
+    "kind": "son",
+    "from": "public/sons/squacco.wav",
+    "to": "public/sons/crabier-chevelu.mp3"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/crabier.jpeg",
+    "to": "public/images/especes/heron-cendre.webp"
+  },
+  {
+    "kind": "son",
+    "from": "public/sons/Ardea.mp3",
+    "to": "public/sons/heron-cendre.mp3"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/crebeg.jpeg",
+    "to": "public/images/especes/grebe-castagneux.webp"
+  },
+  {
+    "kind": "son",
+    "from": "public/sons/Tachybaptus.mp3",
+    "to": "public/sons/grebe-castagneux.mp3"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/poule.jpeg",
+    "to": "public/images/especes/gallinule-poule-d-eau.webp"
+  },
+  {
+    "kind": "son",
+    "from": "public/sons/moorhen.mp3",
+    "to": "public/sons/gallinule-poule-d-eau.mp3"
+  },
+  {
+    "kind": "son",
+    "from": "public/sons/Chroicocephalus.mp3",
+    "to": "public/sons/mouette-rieuse.mp3"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/belon.jpeg",
+    "to": "public/images/especes/tadorne-de-belon.webp"
+  },
+  {
+    "kind": "son",
+    "from": "public/sons/Tadorna.mp3",
+    "to": "public/sons/tadorne-de-belon.mp3"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/plante2.jpeg",
+    "to": "public/images/especes/roseau-commun.webp"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/arbre.jpeg",
+    "to": "public/images/especes/tamaris-d-afrique.webp"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/plante6.jpeg",
+    "to": "public/images/especes/salicorne.webp"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/plante3.jpeg",
+    "to": "public/images/especes/statice.webp"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/flower1.jpeg",
+    "to": "public/images/especes/nigelle-des-champs.webp"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/flower3.jpeg",
+    "to": "public/images/especes/datura-stramoine.webp"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/tort.jpeg",
+    "to": "public/images/especes/tortue-grecque.webp"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/croc.jpeg",
+    "to": "public/images/especes/couleuvre-viperine.webp"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/inse1.jpeg",
+    "to": "public/images/especes/libellule.webp"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/papillon.jpeg",
+    "to": "public/images/especes/petit-monarque.webp"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/Capture3.png",
+    "to": "public/images/sites/halk-el-menzel.webp"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/image12.png",
+    "to": "public/images/sentiers/circuit-oued-soud-1.webp"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/image10.png",
+    "to": "public/images/sentiers/circuit-oued-soud-2.webp"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/image15.jpg",
+    "to": "public/images/sentiers/circuit-oued-soud-3.webp"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/cap2.png",
+    "to": "public/images/sentiers/circuit-oued-soud-4.webp"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/image124.jpg",
+    "to": "public/images/sentiers/circuit-oued-soud-5.webp"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/cap3.png",
+    "to": "public/images/sentiers/sentier-halk-el-menzel-2.webp"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/cap4.png",
+    "to": "public/images/sentiers/sentier-halk-el-menzel-3.webp"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/cap5.png",
+    "to": "public/images/sentiers/sentier-halk-el-menzel-4.webp"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/cap6.png",
+    "to": "public/images/sentiers/sentier-halk-el-menzel-5.webp"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/image11.png",
+    "to": "public/images/sentiers/sentier-halk-el-menzel-plan.webp"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/capture1.png",
+    "to": "public/images/actions/postes-observation-1.webp"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/capture2.png",
+    "to": "public/images/actions/postes-observation-3.webp"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/tower.jpeg",
+    "to": "public/images/actions/postes-observation.webp"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/cap5.jpg",
+    "to": "public/images/actions/panneaux-information-2.webp"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/image4.jpeg",
+    "to": "public/images/actions/panneaux-information-4.webp"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/cap8.png",
+    "to": "public/images/actions/gestion-dechets-1.webp"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/ca7.png",
+    "to": "public/images/actions/gestion-dechets-2.webp"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/image8.jpeg",
+    "to": "public/images/actions/gestion-dechets.webp"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/flower.jpeg",
+    "to": "public/images/actions/plantation-arbres-1.webp"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/arbre3.jpeg",
+    "to": "public/images/actions/plantation-arbres-2.webp"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/image6.jpeg",
+    "to": "public/images/actions/plantation-arbres.webp"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/cap.png",
+    "to": "public/images/partenaires/crda-sousse.webp"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/capt1.png",
+    "to": "public/images/partenaires/medwet.webp"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/capt2.png",
+    "to": "public/images/partenaires/jci-hergla.webp"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/capt3.png",
+    "to": "public/images/partenaires/partenaire-04.webp"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/capt4.png",
+    "to": "public/images/partenaires/partenaire-05.webp"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/capt6.png",
+    "to": "public/images/partenaires/forets-tunisie.webp"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/capt7.png",
+    "to": "public/images/partenaires/isa-chott-mariem.webp"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/capt8.png",
+    "to": "public/images/partenaires/partenaire-08.webp"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/capt9.png",
+    "to": "public/images/partenaires/commune-de-sousse.webp"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/capt10.png",
+    "to": "public/images/partenaires/marie-curie.webp"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/capt11.png",
+    "to": "public/images/partenaires/ppi-oscan.webp"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/cap12.png",
+    "to": "public/images/partenaires/ffem.webp"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/cap13.png",
+    "to": "public/images/partenaires/ofb.webp"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/cap14.png",
+    "to": "public/images/partenaires/mava.webp"
+  },
+  {
+    "kind": "image",
+    "from": "public/images/cap15.png",
+    "to": "public/images/partenaires/uicn.webp"
+  }
+]

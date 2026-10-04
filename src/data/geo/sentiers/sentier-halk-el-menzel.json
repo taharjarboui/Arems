@@ -1,0 +1,25 @@
+{
+  "statut": "provisoire",
+  "centre": [
+    35.97135,
+    10.52168
+  ],
+  "zoom": 16,
+  "points": [
+    {
+      "n": 1,
+      "position": [
+        35.971694,
+        10.524347
+      ]
+    },
+    {
+      "n": 4,
+      "position": [
+        35.970997,
+        10.519022
+      ]
+    }
+  ],
+  "source": "Points 1 (départ) et 4 (arrivée) : coordonnées citées dans les textes de l’ancien site, à vérifier sur le terrain."
+}

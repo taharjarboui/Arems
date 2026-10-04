@@ -4,6 +4,8 @@ Liste à transmettre à l'AREMS. Pour chaque élément : ce qu'il faut, sous que
 
 `npm run todo` donne l'état à jour de ce qui reste à compléter.
 
+Les questions précises issues de la migration de l'ancien site (photos mal attribuées, espèces douteuses, partenaires à identifier, droits des médias) sont détaillées dans [rapport-migration.md](rapport-migration.md).
+
 ## Identité
 
 | Élément | Format souhaité | Emplacement |

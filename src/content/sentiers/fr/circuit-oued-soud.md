@@ -1,0 +1,31 @@
+---
+title: "Circuit écologique de l’Oued Soud"
+summary: "Le circuit n° 2 de l’Oued Soud offre une expérience immersive au cœur de la biodiversité locale avec un parcours de 740 mètres, combinant sensibilisation environnementale et observation de la faune."
+site: "halk-el-menzel"
+image: "/images/sentiers/circuit-oued-soud-1.webp"
+imageAlt: "Plan du circuit écologique de l’Oued Soud"
+distance: "740 m"
+points:
+  - titre: "Départ du circuit"
+    description: "Début de la visite depuis le point A, point de départ pour découvrir la zone humide de l’Oued Soud. Ce lieu est reconnu pour son importance écologique et sert de refuge à de nombreuses espèces. Un panneau d’accueil fournit des informations générales sur le site, son rôle dans la préservation de la biodiversité et les efforts de conservation en cours."
+    image: "/images/sentiers/circuit-oued-soud-1.webp"
+    imageAlt: "Départ du circuit"
+  - titre: "Panneau sur la faune"
+    description: "Au premier arrêt, vous trouverez un panneau d’information dédié à la faune locale de l’Oued Soud. L’accent est mis sur les oiseaux aquatiques et autres espèces visibles dans les zones humides : canards, sarcelles, foulques, hérons, ibis, et râles. Ils se nourrissent principalement de petits poissons, crustacés et insectes aquatiques."
+    image: "/images/sentiers/circuit-oued-soud-2.webp"
+    imageAlt: "Panneau sur la faune"
+  - titre: "Insectes et petites espèces aquatiques"
+    description: "Ce point met l’accent sur la surveillance des insectes et des petites espèces aquatiques qui habitent les zones humides de l’Oued Soud. La présence de libellules et de papillons est un indicateur de la santé de l’écosystème aquatique."
+    image: "/images/sentiers/circuit-oued-soud-3.webp"
+    imageAlt: "Insectes et petites espèces aquatiques"
+  - titre: "Point d’observation"
+    description: "Ce point d’observation naturelle offre une vue panoramique sur les oiseaux aquatiques fréquentant les zones humides. Le matin est idéal pour observer canards, oies et hérons. En fin de journée, limicoles et flamants roses retournent à leurs zones de repos. L’Oued Soud est une halte migratoire importante, où l’on peut voir des espèces rares selon la saison."
+    image: "/images/sentiers/circuit-oued-soud-4.webp"
+    imageAlt: "Point d’observation"
+  - titre: "Insectes et oiseaux d’eau"
+    description: "Cet arrêt combine la surveillance des insectes et des petites espèces aquatiques avec un point d’observation naturelle. Les libellules et papillons indiquent un écosystème sain. On peut aussi observer les oiseaux aquatiques comme les canards, oies, hérons, limicoles et flamants roses. L’Oued Soud sert de halte importante pour les oiseaux migrateurs, avec des espèces rares à observer selon la saison."
+    image: "/images/sentiers/circuit-oued-soud-5.webp"
+    imageAlt: "Insectes et oiseaux d’eau"
+order: 20
+aCompleter: true # graphie à confirmer (Oued Soud, Oued Essoud ou Oued Essed) ; durée, difficulté et coordonnées à fournir
+---

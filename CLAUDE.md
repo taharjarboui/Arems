@@ -45,7 +45,8 @@ Le projet vit dans `AREMS/site/`, dépôt https://github.com/taharjarboui/Arems 
 
 - **Phase 0 faite (4 octobre 2026)** : squelette Astro, `npm run build` passe (accueil provisoire, contact, 404 ; FR seulement via `publishedLangs`). Identité dans `src/config/association.ts` (nom complet d'après le logo : « جمعية البحوث والدراسات في ذاكرة سوسة », graphie française officielle à confirmer). Tokens de couleur sémantiques provisoires (couleurs du logo), polices système ; direction visuelle définitive en phase 1. Logo provisoire : `public/images/logo.png` (repris de l'ancien site, bleu roi, cyan, jaune).
 - **Phase 1 (terminée)** : schémas des collections (`src/content.config.ts`, dont `geo` pour `src/data/geo/sentiers/` et `src/data/geo/sites/`), rubriques et segments d'URL (`sections`, `pagePaths` dans `ui.ts`), navigation complète, listes de rubrique provisoires, page Association provisoire, `npm run todo`, `docs/contenu-a-fournir.md`, couleurs UICN. Direction visuelle « Bleu AREMS » appliquée (tokens, IBM Plex, en-tête et pied de page). **Phase 1 terminée le 4 octobre 2026.**
-- Prochaine étape : phase 2 (migration du contenu).
+- **Phase 2 (terminée le 4 octobre 2026)** : contenu migré par `scripts/migrate-from-sql.mjs` (25 espèces, site Ramsar `halk-el-menzel`, 2 sentiers, 4 actions, 15 partenaires) et médias convertis par `npm run media` (WebP 1600 px, MP3). Corrections et questions pour l'association : `docs/rapport-migration.md`. Les fichiers Markdown font désormais référence : ne plus relancer la migration. Droits des photos et des sons inconnus : à régler avant la mise en ligne publique.
+- Prochaine étape : phase 3 (pages et composants).
 
 Le nouveau site a d'abord été développé en PHP/Symfony 7.3 (`../arems-main/`) : son périmètre fonctionnel et son contenu sont la référence, mais sa stack est abandonnée et il ne démarre pas en l'état. Ce que `../arems-main/` apporte :
 - `db_backup/backup.sql` (dump MySQL) : 4 catégories, 24 espèces (11 oiseaux, 9 plantes, 3 reptiles, 3 insectes), 2 parcours (Oued Soud, Sebkhet Halk El Menzel) avec 10 points d'intérêt, 4 actions environnementales avec leurs détails, 15 partenaires.
@@ -54,17 +55,8 @@ Le nouveau site a d'abord été développé en PHP/Symfony 7.3 (`../arems-main/`
 
 Le site actuellement en ligne sur `memoires-sousse.org` est obsolète et sera écrasé : ne pas s'en inspirer ni le consulter. Le nouveau site est déployé de zéro.
 
-## Contenu à corriger pendant la migration
-Erreurs relevées dans le dump, à ne pas reprendre telles quelles :
-- Héron cendré : les champs scientifiques sont ceux du martin-pêcheur (`Alcedo atthis`, Alcedinidae, Coraciiformes). Correct : `Ardea cinerea`, Ardeidae, Pelecaniformes.
-- Râle d'eau : la photo (`coot.jpeg`) et le son (`atra.wav`) correspondent à la foulque macroule (`Fulica atra`). Soit corriger le média, soit créer une fiche Foulque macroule.
-- Statuts UICN douteux : Canard colvert et Flamant rose notés « Vulnérable » (LC au niveau mondial) ; revérifier tous les statuts.
-- Espèces probablement absentes de Tunisie : Tortue d'Hermann (en Tunisie, c'est la tortue grecque `Testudo graeca`), Couleuvre à collier `Natrix natrix` (plutôt la couleuvre vipérine `Natrix maura`), Papillon monarque (au mieux occasionnel). La photo de la couleuvre est `croc.jpeg`. Faire valider la liste par l'association.
-- `Phragmites communis` : nom à jour `Phragmites australis`.
-- Slugs temporaires (`slug-temp-20` à `slug-temp-30`) et noms de fichiers son erronés (`lamingo.mp3`, `Adrea.mp3`).
-- Fiches génériques à remplacer par des espèces précises observées sur les sites (« Libellule », « Mouche »).
-- Partenaires : noms factices (« Sponsor 1 » à « Sponsor 9 ») ; identifier chaque logo et son site web.
-- « Oued Soud » : vérifier la graphie officielle (le site Ramsar s'appelle peut-être « Sebkhet Halk El Menzel et Oued Essed », à confirmer).
+## Contenu migré de l'ancien site
+Les erreurs de l'ancien site (fiches scientifiquement fausses, photos mal attribuées, statuts UICN erronés, partenaires factices) ont été corrigées pendant la migration ou marquées `aCompleter`. Le détail et les questions ouvertes pour l'association sont dans `docs/rapport-migration.md`. Ne jamais réintroduire une donnée de l'ancien site sans la vérifier.
 
 ## Décisions prises
 - Site PHP/Symfony abandonné : contenu quasi statique, aucune raison de maintenir un serveur PHP et une base MySQL. Stack Astro + Vercel retenue pour sa simplicité d'hébergement et de maintenance. Le code, les composants et l'identité visuelle sont propres à AREMS.
