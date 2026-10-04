@@ -4,6 +4,7 @@ import Base from '../../layouts/Base.astro';
 import { publishedLangs, pagePaths, type Lang, type PageKey } from '../../i18n/ui';
 import { splitId } from '../../i18n/utils';
 import { pageAlternates } from '../../lib/content';
+import { organisation } from '../../lib/jsonld';
 
 // Pages simples (collection `pages`) : /fr/association, plus tard /ar/about, /en/about…
 // Une page n'est générée que si son fichier existe dans la langue et que la langue est publiée.
@@ -22,7 +23,7 @@ const lang = Astro.params.lang as Lang;
 const { entry, key } = Astro.props as { entry: any; key: PageKey };
 const { Content } = await render(entry);
 ---
-<Base lang={lang} title={entry.data.title} description={entry.data.summary} alternates={pageAlternates(key)}>
+<Base lang={lang} title={entry.data.title} description={entry.data.summary} alternates={pageAlternates(key)} jsonLd={key === 'association' ? organisation(Astro.site!) : undefined}>
   <article class="container-x pt-12 pb-16 md:pt-16">
     <h1 class="text-4xl md:text-5xl">{entry.data.title}</h1>
     <div class="prose-arems mt-8 max-w-prose">

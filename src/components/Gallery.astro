@@ -1,6 +1,7 @@
 ---
 /** Galerie de photos ; un clic ouvre la photo en grand dans un <dialog> natif (Échap ou bouton pour fermer). */
 interface Props { images: { src: string; alt: string; credit?: string }[]; openLabel: string; closeLabel: string }
+import { vignette } from '../lib/images';
 const { images, openLabel, closeLabel } = Astro.props;
 ---
 {images.length > 0 && (
@@ -9,7 +10,7 @@ const { images, openLabel, closeLabel } = Astro.props;
       {images.map((img) => (
         <li>
           <button type="button" class="gallery-open block w-full overflow-hidden rounded border border-bordure" data-src={img.src} data-alt={img.alt} aria-label={`${openLabel} : ${img.alt}`}>
-            <img src={img.src} alt={img.alt} loading="lazy" width="600" height="400" class="aspect-[3/2] w-full object-cover transition-opacity hover:opacity-90" />
+            <img src={vignette(img.src)} alt={img.alt} loading="lazy" width="600" height="400" class="aspect-[3/2] w-full object-cover transition-opacity hover:opacity-90" />
           </button>
         </li>
       ))}

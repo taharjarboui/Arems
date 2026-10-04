@@ -14,7 +14,7 @@
 
 const COOKIE = 'arems_acces';
 const MAX_AGE = 60 * 60 * 24 * 30; // 30 jours
-const PUBLIC_EXACT = new Set(['/bientot', '/bientot/', '/images/logo.png', '/favicon.ico']);
+const PUBLIC_EXACT = new Set(['/bientot', '/bientot/', '/images/logo.png', '/images/logo-180.webp', '/images/favicon-32.png', '/favicon.ico']);
 const PUBLIC_PREFIXES = ['/_astro/'];
 
 const next = () => new Response(null, { headers: { 'x-middleware-next': '1', 'x-robots-tag': 'noindex' } });

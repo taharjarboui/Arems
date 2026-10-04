@@ -6,6 +6,8 @@ import { categoriesEspeces } from '../../content.config';
 import type { Lang, UiKey } from '../../i18n/ui';
 import { useTranslations, contactUrl, langPaths, sectionUrl, splitId } from '../../i18n/utils';
 import { homeAlternates, entriesFor, geoFor, partenaires } from '../../lib/content';
+import { organisation, siteWeb } from '../../lib/jsonld';
+import { srcset, sizes } from '../../lib/images';
 
 export function getStaticPaths() {
   return langPaths();
@@ -30,11 +32,11 @@ const actions = (await entriesFor('actions', lang)).slice(0, 4);
 const logos = await partenaires();
 const hero = especes.find((e) => slugOf(e.id) === 'flamant-rose')?.data;
 ---
-<Base lang={lang} title={t('site.name')} description={t('hero.text')} alternates={homeAlternates()}>
+<Base lang={lang} title={t('site.name')} description={t('hero.text')} alternates={homeAlternates()} jsonLd={[organisation(Astro.site!), siteWeb(Astro.site!, lang)]}>
 
   <!-- Accroche : photo de la sebkha, message, météo du site -->
   <section class="relative isolate overflow-hidden bg-encre text-white">
-    {hero?.image && <img src={hero.image} alt={hero.imageAlt ?? ''} width="1600" height="1066" fetchpriority="high" class="absolute inset-0 -z-10 h-full w-full object-cover opacity-55" />}
+    {hero?.image && <img src={hero.image} srcset={srcset(hero.image)} sizes={sizes.pleine} alt={hero.imageAlt ?? ''} width="1600" height="1066" fetchpriority="high" class="absolute inset-0 -z-10 h-full w-full object-cover opacity-55" />}
     <div class="container-x grid items-end gap-8 py-16 md:grid-cols-[minmax(0,1fr)_300px] md:py-24">
       <div>
         <h1 class="max-w-3xl text-4xl leading-tight md:text-6xl">{t('hero.title')}</h1>
@@ -61,7 +63,7 @@ const hero = especes.find((e) => slugOf(e.id) === 'flamant-rose')?.data;
       {groupes.map((g) => (
         <li>
           <a href={`${sectionUrl(lang, 'biodiversite')}#${g.categorie}`} class="group relative block aspect-[4/3] overflow-hidden rounded bg-primaire">
-            {g.image && <img src={g.image} alt="" loading="lazy" width="600" height="450" class="h-full w-full object-cover opacity-80 transition-opacity group-hover:opacity-100" />}
+            {g.image && <img src={g.image} srcset={srcset(g.image)} sizes={sizes.tuile} alt="" loading="lazy" width="600" height="450" class="h-full w-full object-cover opacity-80 transition-opacity group-hover:opacity-100" />}
             <span class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-encre/90 to-transparent p-4 text-white">
               <span class="block text-xl font-bold">{t(`cat.${g.categorie}` as UiKey)}</span>
               <span class="text-sm text-white/85">{g.count}</span>

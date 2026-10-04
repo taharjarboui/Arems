@@ -5,10 +5,14 @@ import sitemap from '@astrojs/sitemap';
 import vercel from '@astrojs/vercel';
 
 export default defineConfig({
-  site: 'https://memoires-sousse.org',
+  // Domaine principal : memoires-sousse.org redirige vers www (réglage Vercel).
+  site: 'https://www.memoires-sousse.org',
+  // Une seule forme d'URL par page (avec « / » final), pour le référencement.
+  trailingSlash: 'always',
   // Tout le site reste statique ; seul /api/contact tourne côté serveur (fonction Vercel).
   adapter: vercel(),
-  integrations: [sitemap()],
+  // La page d'attente /bientot/ n'a pas sa place dans le plan du site.
+  integrations: [sitemap({ filter: (page) => !page.includes('/bientot') })],
   // La racine renvoie vers la langue par défaut (redirection 302 côté Vercel).
   redirects: { '/': { status: 302, destination: '/fr/' } },
   // Les trois langues existent dans l'architecture ; seules celles de `publishedLangs`

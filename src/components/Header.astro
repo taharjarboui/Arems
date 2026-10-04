@@ -16,12 +16,12 @@ const nav: { href: string; label: string; match: string[] }[] = [
   { href: contactUrl(lang), label: t('contact.title'), match: [contactUrl(lang)] },
 ];
 const current = Astro.url.pathname;
-const isActive = (match: string[]) => match.some((m) => current === m || current.startsWith(`${m}/`));
+const isActive = (match: string[]) => match.some((m) => current.startsWith(m));
 ---
 <header class="bg-primaire text-white">
   <div class="container-x flex items-center justify-between gap-6 py-3">
     <a href={homeUrl(lang)} class="flex items-center gap-3 shrink-0">
-      <img src="/images/logo.png" alt="" width="579" height="366" class="h-11 w-auto rounded" />
+      <img src="/images/logo-180.webp" alt="" width="285" height="180" class="h-11 w-auto rounded" />
       <span class="leading-tight">
         <span class="block font-display text-lg tracking-wide">{association.sigle}</span>
         <span class="hidden text-xs text-white/80 lg:block">{t('site.tagline')}</span>

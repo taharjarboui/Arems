@@ -6,6 +6,7 @@ import Gallery from '../Gallery.astro';
 import type { Lang } from '../../i18n/ui';
 import { useTranslations, sectionUrl, formatDate } from '../../i18n/utils';
 import { bySlug } from '../../lib/content';
+import { srcset, sizes } from '../../lib/images';
 
 interface Props { entry: CollectionEntry<'actions'>; lang: Lang }
 const { entry, lang } = Astro.props;
@@ -20,8 +21,8 @@ const site = d.site ? (await bySlug('sites', lang)).get(d.site) : undefined;
   <div class="min-w-0 space-y-8">
     {d.image && (
       <figure class="mx-0 mt-0">
-        <img src={d.image} alt={d.imageAlt ?? d.title} width="1600" height="1067" class="w-full rounded object-cover" />
-        {d.imageCredit && <figcaption class="mt-2 text-xs text-encre/60">{t('espece.photo')} : {d.imageCredit}</figcaption>}
+        <img src={d.image} srcset={srcset(d.image)} sizes={sizes.colonne} fetchpriority="high" alt={d.imageAlt ?? d.title} width="1600" height="1067" class="w-full rounded object-cover" />
+        {d.imageCredit && <figcaption class="mt-2 text-xs text-encre/75">{t('espece.photo')} : {d.imageCredit}</figcaption>}
       </figure>
     )}
     <div class="prose-arems max-w-prose"><Content /></div>

@@ -24,10 +24,12 @@ export function langPaths() {
   return publishedLangs.map((lang) => ({ params: { lang } }));
 }
 
-/** URL d'une section ("/fr/biodiversite") ou d'une fiche ("/fr/biodiversite/flamant-rose"). */
+// Toutes les URL internes se terminent par « / », comme les pages générées (trailingSlash: 'always').
+
+/** URL d'une section ("/fr/biodiversite/") ou d'une fiche ("/fr/biodiversite/flamant-rose/"). */
 export function sectionUrl(lang: Lang, section: SectionKey, slug?: string) {
-  const base = `/${lang}/${sections[section].path[lang]}`;
-  return slug ? `${base}/${slug}` : base;
+  const base = `/${lang}/${sections[section].path[lang]}/`;
+  return slug ? `${base}${slug}/` : base;
 }
 
 /** Retrouve la section à partir d'un segment d'URL dans une langue donnée. */
@@ -37,7 +39,7 @@ export function sectionFromPath(lang: Lang, segment: string): SectionKey | undef
 
 /** URL d'une page simple ("/fr/association"). */
 export function pageUrl(lang: Lang, page: PageKey) {
-  return `/${lang}/${pagePaths[page][lang]}`;
+  return `/${lang}/${pagePaths[page][lang]}/`;
 }
 
 export function homeUrl(lang: Lang) {
@@ -56,5 +58,5 @@ export function formatDate(date: Date, lang: Lang) {
 }
 
 export function contactUrl(lang: Lang) {
-  return `/${lang}/contact`;
+  return `/${lang}/contact/`;
 }

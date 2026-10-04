@@ -2,9 +2,9 @@
 // Page d'attente publique, affichée tant que le site est protégé par mot de passe
 // (src/config/protection.json). Elle ne charge aucune ressource protégée : seulement le logo et le CSS.
 // Le logo mène à /acces, le formulaire de mot de passe : c'est le seul lien vers le site.
-import '@fontsource/ibm-plex-sans/400.css';
-import '@fontsource/ibm-plex-sans/700.css';
-import '@fontsource/ibm-plex-sans-arabic/400.css';
+import '@fontsource/ibm-plex-sans/latin-400.css';
+import '@fontsource/ibm-plex-sans/latin-700.css';
+import '@fontsource/ibm-plex-sans-arabic/arabic-400.css';
 import '../styles/global.css';
 import { association } from '../config/association';
 ---
@@ -15,13 +15,13 @@ import { association } from '../config/association';
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex" />
     <title>{association.sigle} · Bientôt en ligne</title>
-    <link rel="icon" type="image/png" href="/images/logo.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png" />
   </head>
   <body class="flex min-h-screen flex-col bg-primaire text-white">
     <div class="filet-logo" aria-hidden="true"></div>
     <main class="container-x flex flex-1 flex-col justify-center py-16">
       <a href="/acces" class="w-fit" aria-label={association.sigle}>
-        <img src="/images/logo.png" alt="" width="579" height="366" class="h-24 w-auto rounded" />
+        <img src="/images/logo-180.webp" alt="" width="285" height="180" class="h-24 w-auto rounded" />
       </a>
       <h1 class="mt-10 max-w-3xl text-4xl leading-tight md:text-6xl">Le nouveau site de l’association arrive bientôt</h1>
       <p class="mt-6 max-w-2xl text-lg leading-relaxed text-white/90">

@@ -13,6 +13,7 @@ const isNext = (r) => r.headers.get('x-middleware-next') === '1';
 assert.ok(isNext(await get('/bientot/')), 'page d’attente publique');
 assert.ok(isNext(await get('/_astro/app.css')), 'CSS public');
 assert.ok(isNext(await get('/images/logo.png')), 'logo public');
+assert.ok(isNext(await get('/images/logo-180.webp')), 'logo léger public');
 assert.match(await (await get('/robots.txt')).text(), /Disallow: \//, 'robots.txt interdit l’indexation');
 assert.equal((await get('/acces')).status, 200, 'formulaire accessible');
 

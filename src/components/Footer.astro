@@ -1,6 +1,6 @@
 ---
 import type { Lang } from '../i18n/ui';
-import { useTranslations, contactUrl } from '../i18n/utils';
+import { useTranslations, contactUrl, pageUrl } from '../i18n/utils';
 import { association } from '../config/association';
 interface Props { lang: Lang }
 const { lang } = Astro.props;
@@ -11,7 +11,7 @@ const year = new Date().getFullYear();
 <footer class="mt-20 bg-encre text-white">
   <div class="container-x flex flex-col gap-8 py-10 md:flex-row md:items-start md:justify-between">
     <div class="flex items-start gap-4">
-      <img src="/images/logo.png" alt={association.sigle} width="579" height="366" class="h-14 w-auto rounded" />
+      <img src="/images/logo-180.webp" alt={association.sigle} width="285" height="180" class="h-14 w-auto rounded" />
       <div class="text-sm leading-relaxed">
         <p class="font-semibold">{association.nom}</p>
         <p class="text-white/75" lang="ar" dir="rtl">{association.nomAr}</p>
@@ -20,8 +20,9 @@ const year = new Date().getFullYear();
     </div>
     <ul class="flex flex-wrap gap-x-6 gap-y-2 text-sm">
       <li><a class="text-accent hover:underline" href={contactUrl(lang)}>{t('contact.title')}</a></li>
+      <li><a class="text-accent hover:underline" href={pageUrl(lang, 'mentions-legales')}>{t('footer.mentions')}</a></li>
       {association.reseaux.map((r) => <li><a class="text-accent hover:underline" href={r.url} rel="noopener">{r.nom}</a></li>)}
     </ul>
   </div>
-  <p class="container-x border-t border-white/15 py-4 text-xs text-white/60">© {year} {association.sigle}. {t('footer.rights')}</p>
+  <p class="container-x border-t border-white/15 py-4 text-xs text-white/75">© {year} {association.sigle}. {t('footer.rights')}</p>
 </footer>

@@ -7,6 +7,7 @@ import { categoriesEspeces } from '../../../content.config';
 import { publishedLangs, sections, type Lang, type SectionKey, type UiKey } from '../../../i18n/ui';
 import { useTranslations, sectionUrl, splitId } from '../../../i18n/utils';
 import { entriesFor, sectionAlternates } from '../../../lib/content';
+import { srcset } from '../../../lib/images';
 
 // Page de liste de chaque rubrique : /fr/biodiversite, /fr/sites, /fr/sentiers, /fr/actions.
 
@@ -35,14 +36,14 @@ const empty = !especes.length && !sites.length && !sentiers.length && !actions.l
 <Base lang={lang} title={title} description={intro} alternates={sectionAlternates(key)}>
   <PageHeader title={title} intro={intro} />
 
-  {empty && <p class="container-x pb-16 text-encre/60">{t('empty')}</p>}
+  {empty && <p class="container-x pb-16 text-encre/75">{t('empty')}</p>}
 
   {groupes.length > 0 && (
     <>
       <nav class="container-x pb-8" aria-label={t('biodiversite.groupes')}>
         <ul class="flex flex-wrap gap-2">
           {groupes.map((g) => (
-            <li><a href={`#${g.categorie}`} class="inline-block rounded border border-bordure px-3 py-1.5 font-medium hover:border-primaire hover:text-primaire">{t(`cat.${g.categorie}` as UiKey)} <span class="text-encre/60">({g.items.length})</span></a></li>
+            <li><a href={`#${g.categorie}`} class="inline-block rounded border border-bordure px-3 py-1.5 font-medium hover:border-primaire hover:text-primaire">{t(`cat.${g.categorie}` as UiKey)} <span class="text-encre/75">({g.items.length})</span></a></li>
           ))}
         </ul>
       </nav>
@@ -69,7 +70,7 @@ const empty = !especes.length && !sites.length && !sentiers.length && !actions.l
     return (
       <section class="container-x pb-14">
         <article class="grid gap-6 overflow-hidden rounded border border-bordure md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
-          {site.data.image && <img src={site.data.image} alt={site.data.imageAlt ?? ''} width="1200" height="800" class="h-full w-full object-cover" />}
+          {site.data.image && <img src={site.data.image} srcset={srcset(site.data.image)} sizes="(min-width: 768px) 50vw, 100vw" alt={site.data.imageAlt ?? ''} width="1200" height="800" class="h-full w-full object-cover" />}
           <div class="p-6">
             {site.data.protection && <p class="text-sm font-semibold text-primaire">{site.data.protection}</p>}
             <h2 class="mt-1 text-2xl"><a href={sectionUrl(lang, 'sites', siteSlug)} class="hover:underline">{site.data.title}</a></h2>

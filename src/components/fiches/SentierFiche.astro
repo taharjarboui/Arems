@@ -6,6 +6,7 @@ import GeoMap, { type GeoMarker } from '../GeoMap.astro';
 import type { Lang, UiKey } from '../../i18n/ui';
 import { useTranslations, sectionUrl, splitId } from '../../i18n/utils';
 import { bySlug, geoFor } from '../../lib/content';
+import { srcset, vignette } from '../../lib/images';
 
 interface Props { entry: CollectionEntry<'sentiers'>; lang: Lang }
 const { entry, lang } = Astro.props;
@@ -51,7 +52,7 @@ const markers: GeoMarker[] = (geo?.points ?? [])
               <div class="min-w-0">
                 <h3 class="text-xl">{p.titre}</h3>
                 <p class="mt-2 max-w-prose leading-relaxed text-encre/85">{p.description}</p>
-                {p.image && <img src={p.image} alt={p.imageAlt ?? p.titre} loading="lazy" width="1200" height="800" class="mt-4 max-h-96 w-auto max-w-full rounded border border-bordure" />}
+                {p.image && <img src={p.image} srcset={srcset(p.image)} sizes="(min-width: 768px) 640px, 100vw" alt={p.imageAlt ?? p.titre} loading="lazy" width="1200" height="800" class="mt-4 max-h-96 w-auto max-w-full rounded border border-bordure" />}
               </div>
             </li>
           ))}
@@ -72,7 +73,7 @@ const markers: GeoMarker[] = (geo?.points ?? [])
     ]} />
     {d.image && (
       <figure class="m-0">
-        <a href={d.image}><img src={d.image} alt={d.imageAlt ?? t('sentier.plan')} loading="lazy" width="800" height="600" class="w-full rounded border border-bordure" /></a>
+        <a href={d.image}><img src={vignette(d.image)} alt={d.imageAlt ?? t('sentier.plan')} loading="lazy" width="800" height="600" class="w-full rounded border border-bordure" /></a>
         <figcaption class="mt-2 text-sm text-encre/70">{t('sentier.plan')}</figcaption>
       </figure>
     )}

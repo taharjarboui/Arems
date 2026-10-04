@@ -27,6 +27,15 @@ npm run preview    # teste le build
 | `src/styles/global.css` | Palette, typographie. |
 | `public/images/` | Images optimisées pour le web (1600 px max). |
 
+## Scripts
+
+| Commande | Rôle |
+|---|---|
+| `npm run todo` | Liste ce qui reste à compléter (contenu provisoire, coordonnées, partenaires) |
+| `npm run vignettes` | Crée la vignette 800 px de chaque nouvelle photo (lancé aussi par `npm run build`) |
+| `npm run icones` | Régénère favicon, icône mobile, logo léger et image de partage à partir du logo |
+| `npm run test:protection` | Teste la protection par mot de passe |
+
 ## Publier une langue
 
 Traduire les libellés dans `src/i18n/ui.ts` et le contenu dans `src/content/<collection>/<langue>/`, puis ajouter la langue à `publishedLangs`.

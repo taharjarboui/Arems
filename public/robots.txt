@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://www.memoires-sousse.org/sitemap-index.xml

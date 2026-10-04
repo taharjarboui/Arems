@@ -20,6 +20,7 @@ interface Props {
 }
 const { centre, zoom, trace = [], markers = [], provisoire = false, label, provisoireLabel, locate, class: cls = 'h-[420px]' } = Astro.props;
 ---
+<link rel="preconnect" href="https://tile.openstreetmap.org" crossorigin />
 <figure class="geo-map-wrap m-0">
   <div class:list={['geo-map w-full overflow-hidden rounded border border-bordure bg-fond-alt', cls]}
        data-centre={JSON.stringify(centre)}
@@ -56,7 +57,7 @@ const { centre, zoom, trace = [], markers = [], provisoire = false, label, provi
     const markers = JSON.parse(el.dataset.markers ?? '[]') as Marker[];
 
     const map = L.map(el, { scrollWheelZoom: false }).setView(centre, Number(el.dataset.zoom ?? 14));
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     }).addTo(map);

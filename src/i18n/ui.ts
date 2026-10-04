@@ -26,6 +26,7 @@ export type SectionKey = keyof typeof sections;
 // Pages simples (collection `pages`) : slug du fichier → segment d'URL par langue.
 export const pagePaths = {
   association: { fr: 'association', ar: 'about', en: 'about' },
+  'mentions-legales': { fr: 'mentions-legales', ar: 'legal', en: 'legal' },
 } as const satisfies Record<string, Record<Lang, string>>;
 
 export type PageKey = keyof typeof pagePaths;
@@ -36,6 +37,7 @@ const fr = {
   'nav.menu': 'Menu',
   'nav.lang': 'Langue',
   'nav.main': 'Navigation principale',
+  'nav.contenu': 'Aller au contenu',
   'nav.biodiversite': 'Biodiversité',
   'nav.sites': 'Sites & sentiers',
   'nav.actions': 'Actions',
@@ -67,6 +69,7 @@ const fr = {
   'footer.about': 'L’association',
   'footer.contact': 'Nous contacter',
   'footer.rights': 'Tous droits réservés.',
+  'footer.mentions': 'Mentions légales',
   'contact.title': 'Nous contacter',
   'contact.intro': 'Une question sur nos actions, l’envie de participer, une proposition de partenariat, une observation à signaler ? Écrivez-nous.',
   'contact.name': 'Votre nom',

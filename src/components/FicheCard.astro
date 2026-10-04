@@ -11,13 +11,14 @@ interface Props {
   sci?: string;
   noImageLabel?: string;
 }
+import { srcset, sizes } from '../lib/images';
 const { href, title, summary, image, imageAlt = '', meta, sci, noImageLabel } = Astro.props;
 ---
 <article class="group flex flex-col overflow-hidden rounded border border-bordure bg-fond transition-colors hover:border-primaire">
   <a href={href} class="relative block aspect-[3/2] overflow-hidden bg-fond-alt" tabindex="-1" aria-hidden="true">
     {image
-      ? <img src={image} alt={imageAlt} loading="lazy" width="600" height="400" class="absolute inset-0 h-full w-full object-cover" />
-      : <span class="absolute inset-0 flex items-center justify-center text-sm text-encre/50">{noImageLabel}</span>}
+      ? <img src={image} srcset={srcset(image)} sizes={sizes.carte} alt={imageAlt} loading="lazy" width="600" height="400" class="absolute inset-0 h-full w-full object-cover" />
+      : <span class="absolute inset-0 flex items-center justify-center text-sm text-encre/70">{noImageLabel}</span>}
   </a>
   <div class="flex flex-1 flex-col gap-1 p-4">
     {meta && <p class="text-sm font-semibold text-primaire">{meta}</p>}
