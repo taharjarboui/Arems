@@ -23,7 +23,13 @@ Architecture trilingue : `fr` (défaut), `ar` (RTL), `en`. **La v1 ne publie que
 ## Design
 **AREMS a sa propre identité, sans aucun point commun visuel ni structurel avec d'autres sites du même auteur (en particulier Visit Soussa)** : ni palette, ni polices, ni signature graphique, ni composants, ni mise en page partagés. Seule la stack technique est la même.
 
-Direction visuelle à fixer en phase 1, à partir du logo de l'association (bleu roi, cyan, jaune ; texte arabe « جمعية البحوث والدراسات في ذاكرة سوسة ») et de son sujet (zones humides, oiseaux, flore des sebkhas). En attendant, `global.css` définit des tokens sémantiques provisoires (`encre`, `primaire`, `accent`, `fond`, `fond-alt`, `bordure`) aux couleurs du logo et des polices système ; les composants n'utilisent que ces noms. Fiches espèces : grande photo, nom vernaculaire puis nom scientifique en italique, badge de statut UICN coloré selon le code officiel, lecteur audio natif (`<audio>`) quand un son existe.
+Direction visuelle **« Bleu AREMS »** (choisie le 4 octobre 2026 parmi trois pistes), tirée du logo :
+- Tokens dans `src/styles/global.css`, les composants n'utilisent que ces noms : `encre` #0f1b3d (texte, fonds sombres), `primaire` #1d3fa8 (bleu roi : en-tête, liens), `secondaire` #19a7d4 (cyan : décoratif seulement, trop clair pour du texte sur blanc), `accent` #ffd21a (jaune : **réservé aux boutons d'action**, toujours avec texte encre), `fond` blanc, `fond-alt` #eef2fa, `bordure` #d4dcef.
+- Typographie : IBM Plex Sans (titres et texte) et IBM Plex Sans Arabic (même dessin), hébergées avec le site via `@fontsource` (aucun appel à Google Fonts).
+- Signature : en-tête bleu roi, nav soulignée de jaune pour la rubrique active, filet cyan/jaune (`.filet-logo`) sous l'en-tête ; pied de page encre.
+- Badges UICN aux couleurs officielles (`uicn-lc`, `uicn-nt`…), indépendantes de la palette.
+
+Fiches espèces : grande photo, nom vernaculaire puis nom scientifique en italique, badge de statut UICN coloré selon le code officiel, lecteur audio natif (`<audio>`) quand un son existe.
 
 ## Conventions
 - Une fiche = un fichier `src/content/<collection>/<lang>/<slug>.md` ; même slug dans chaque langue. Slug = nom vernaculaire FR en kebab-case (`flamant-rose`, `heron-cendre`).
@@ -38,7 +44,8 @@ Direction visuelle à fixer en phase 1, à partir du logo de l'association (bleu
 Le projet vit dans `AREMS/site/`, dépôt https://github.com/taharjarboui/Arems (branche `main`). La refonte suit `docs/plan-refonte.md`.
 
 - **Phase 0 faite (4 octobre 2026)** : squelette Astro, `npm run build` passe (accueil provisoire, contact, 404 ; FR seulement via `publishedLangs`). Identité dans `src/config/association.ts` (nom complet d'après le logo : « جمعية البحوث والدراسات في ذاكرة سوسة », graphie française officielle à confirmer). Tokens de couleur sémantiques provisoires (couleurs du logo), polices système ; direction visuelle définitive en phase 1. Logo provisoire : `public/images/logo.png` (repris de l'ancien site, bleu roi, cyan, jaune).
-- **Phase 1 en cours** : fait — schémas des collections (`src/content.config.ts`, dont `geo` pour `src/data/geo/sentiers/` et `src/data/geo/sites/`), rubriques et segments d'URL (`sections`, `pagePaths` dans `ui.ts`), navigation complète, listes de rubrique provisoires, page Association provisoire, `npm run todo`, `docs/contenu-a-fournir.md`, couleurs UICN. Reste : direction visuelle (trois pistes proposées le 4 octobre 2026 : Bleu AREMS, Sebkha, Carnet de terrain ; en attente du choix), puis tokens et typographie définitifs.
+- **Phase 1 en cours** : fait — schémas des collections (`src/content.config.ts`, dont `geo` pour `src/data/geo/sentiers/` et `src/data/geo/sites/`), rubriques et segments d'URL (`sections`, `pagePaths` dans `ui.ts`), navigation complète, listes de rubrique provisoires, page Association provisoire, `npm run todo`, `docs/contenu-a-fournir.md`, couleurs UICN. Direction visuelle « Bleu AREMS » appliquée (tokens, IBM Plex, en-tête et pied de page). **Phase 1 terminée le 4 octobre 2026.**
+- Prochaine étape : phase 2 (migration du contenu).
 
 Le nouveau site a d'abord été développé en PHP/Symfony 7.3 (`../arems-main/`) : son périmètre fonctionnel et son contenu sont la référence, mais sa stack est abandonnée et il ne démarre pas en l'état. Ce que `../arems-main/` apporte :
 - `db_backup/backup.sql` (dump MySQL) : 4 catégories, 24 espèces (11 oiseaux, 9 plantes, 3 reptiles, 3 insectes), 2 parcours (Oued Soud, Sebkhet Halk El Menzel) avec 10 points d'intérêt, 4 actions environnementales avec leurs détails, 15 partenaires.

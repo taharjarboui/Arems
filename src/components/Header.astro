@@ -18,13 +18,13 @@ const nav: { href: string; label: string; match: string[] }[] = [
 const current = Astro.url.pathname;
 const isActive = (match: string[]) => match.some((m) => current === m || current.startsWith(`${m}/`));
 ---
-<header class="border-b border-bordure bg-fond">
-  <div class="container-x flex items-center justify-between gap-6 py-4">
+<header class="bg-primaire text-white">
+  <div class="container-x flex items-center justify-between gap-6 py-3">
     <a href={homeUrl(lang)} class="flex items-center gap-3 shrink-0">
-      <img src="/images/logo.png" alt="" width="579" height="366" class="h-12 w-auto" />
+      <img src="/images/logo.png" alt="" width="579" height="366" class="h-11 w-auto rounded" />
       <span class="leading-tight">
-        <span class="block font-display text-lg text-primaire">{association.sigle}</span>
-        <span class="hidden text-xs text-encre/70 lg:block">{t('site.tagline')}</span>
+        <span class="block font-display text-lg tracking-wide">{association.sigle}</span>
+        <span class="hidden text-xs text-white/80 lg:block">{t('site.tagline')}</span>
       </span>
     </a>
 
@@ -36,7 +36,7 @@ const isActive = (match: string[]) => match.some((m) => current === m || current
             return (
               <li>
                 <a href={href}
-                   class:list={['border-b-2 py-1 font-medium', active ? 'border-primaire text-primaire' : 'border-transparent hover:border-bordure']}
+                   class:list={['border-b-2 py-1 font-medium', active ? 'border-accent' : 'border-transparent text-white/90 hover:border-white/60 hover:text-white']}
                    aria-current={active ? 'page' : undefined}>{label}</a>
               </li>
             );
@@ -52,7 +52,7 @@ const isActive = (match: string[]) => match.some((m) => current === m || current
                 <a href={alternates[l] ?? homeUrl(l)}
                    hreflang={l}
                    lang={l}
-                   class:list={[l === lang ? 'font-semibold text-primaire' : 'text-encre/70 hover:text-primaire']}
+                   class:list={[l === lang ? 'font-semibold underline decoration-accent decoration-2 underline-offset-4' : 'text-white/80 hover:text-white']}
                    aria-current={l === lang ? 'true' : undefined}>{languages[l]}</a>
               </li>
             ))}
@@ -65,13 +65,14 @@ const isActive = (match: string[]) => match.some((m) => current === m || current
       </button>
     </div>
   </div>
-  <nav id="menu-mobile" class="md:hidden hidden border-t border-bordure bg-fond-alt" aria-label={t('nav.main')}>
+  <nav id="menu-mobile" class="md:hidden hidden border-t border-white/20 bg-primaire-fonce" aria-label={t('nav.main')}>
     <ul class="container-x py-2">
-      {nav.map(({ href, label }) => (
-        <li><a href={href} class="block py-3 font-medium">{label}</a></li>
+      {nav.map(({ href, label, match }) => (
+        <li><a href={href} class:list={['block py-3 font-medium', isActive(match) && 'text-accent']} aria-current={isActive(match) ? 'page' : undefined}>{label}</a></li>
       ))}
     </ul>
   </nav>
+  <div class="filet-logo" aria-hidden="true"></div>
 </header>
 <script>
   const btn = document.getElementById('menu-toggle');

@@ -8,20 +8,20 @@ const t = useTranslations(lang);
 const year = new Date().getFullYear();
 // Partenaires (collection `partenaires`) ajoutés en phase 1.
 ---
-<footer class="mt-20 border-t border-bordure bg-fond-alt">
+<footer class="mt-20 bg-encre text-white">
   <div class="container-x flex flex-col gap-8 py-10 md:flex-row md:items-start md:justify-between">
     <div class="flex items-start gap-4">
-      <img src="/images/logo.png" alt={association.sigle} width="579" height="366" class="h-14 w-auto" />
+      <img src="/images/logo.png" alt={association.sigle} width="579" height="366" class="h-14 w-auto rounded" />
       <div class="text-sm leading-relaxed">
         <p class="font-semibold">{association.nom}</p>
-        <p class="text-encre/70" lang="ar" dir="rtl">{association.nomAr}</p>
-        {association.adresse && <p class="mt-2 text-encre/70">{association.adresse}</p>}
+        <p class="text-white/75" lang="ar" dir="rtl">{association.nomAr}</p>
+        {association.adresse && <p class="mt-2 text-white/75">{association.adresse}</p>}
       </div>
     </div>
     <ul class="flex flex-wrap gap-x-6 gap-y-2 text-sm">
-      <li><a class="text-primaire hover:underline" href={contactUrl(lang)}>{t('contact.title')}</a></li>
-      {association.reseaux.map((r) => <li><a class="text-primaire hover:underline" href={r.url} rel="noopener">{r.nom}</a></li>)}
+      <li><a class="text-accent hover:underline" href={contactUrl(lang)}>{t('contact.title')}</a></li>
+      {association.reseaux.map((r) => <li><a class="text-accent hover:underline" href={r.url} rel="noopener">{r.nom}</a></li>)}
     </ul>
   </div>
-  <p class="container-x border-t border-bordure py-4 text-xs text-encre/60">© {year} {association.sigle}. {t('footer.rights')}</p>
+  <p class="container-x border-t border-white/15 py-4 text-xs text-white/60">© {year} {association.sigle}. {t('footer.rights')}</p>
 </footer>

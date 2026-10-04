@@ -1,21 +1,24 @@
 @import "tailwindcss";
 
 /* ------------------------------------------------------------------
-   Tokens de couleur et de typographie.
-   Valeurs PROVISOIRES tirées du logo AREMS (bleu roi, cyan, jaune) :
-   la direction visuelle définitive est fixée en phase 1.
+   Direction visuelle « Bleu AREMS » (choisie le 4 octobre 2026), tirée du logo.
+   - Bleu roi : structure (en-tête, liens, titres d'accent).
+   - Cyan : accompagnement décoratif uniquement (filets, bordures) ; trop clair pour du texte sur blanc.
+   - Jaune : réservé aux boutons d'action, toujours avec du texte encre.
    Les composants n'utilisent que ces noms sémantiques, jamais de couleur en dur.
    ------------------------------------------------------------------ */
 @theme {
-  --color-encre: #14213d;         /* texte principal                    */
-  --color-primaire: #1e4fbf;      /* bleu du logo : liens, navigation   */
-  --color-primaire-clair: #e3ebfa;
-  --color-accent: #ffd60a;        /* jaune du logo : appels à l'action  */
-  --color-accent-fonce: #e6bf00;
-  --color-accent-clair: #fff6c7;
+  --color-encre: #0f1b3d;         /* texte principal, fonds sombres      */
+  --color-primaire: #1d3fa8;      /* bleu roi du logo                    */
+  --color-primaire-fonce: #152f80;
+  --color-primaire-clair: #e3e9f8;
+  --color-secondaire: #19a7d4;    /* cyan du logo, décoratif             */
+  --color-accent: #ffd21a;        /* jaune du logo : boutons d'action    */
+  --color-accent-fonce: #e6b800;
+  --color-accent-clair: #fff4c2;
   --color-fond: #ffffff;
-  --color-fond-alt: #f3f6f9;      /* fond des sections alternées        */
-  --color-bordure: #d5dde6;
+  --color-fond-alt: #eef2fa;      /* fond bleuté des sections alternées  */
+  --color-bordure: #d4dcef;
 
   /* Couleurs officielles des catégories UICN (Liste rouge) : fixes, indépendantes de la direction visuelle. */
   --color-uicn-lc: #60c659;
@@ -28,10 +31,10 @@
   --color-uicn-dd: #d1d1c6;
   --color-uicn-ne: #ffffff;
 
-  /* Polices système en attendant le choix typographique de la phase 1. */
-  --font-display: ui-sans-serif, system-ui, sans-serif;
-  --font-sans: ui-sans-serif, system-ui, sans-serif;
-  --font-arabic: "Geeza Pro", "Segoe UI", "Noto Sans Arabic", sans-serif;
+  /* IBM Plex Sans et sa déclinaison arabe (même dessin), hébergées avec le site (@fontsource). */
+  --font-display: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-arabic: "IBM Plex Sans Arabic", "IBM Plex Sans", "Geeza Pro", sans-serif;
 }
 
 @layer base {
@@ -45,7 +48,8 @@
   h1, h2, h3, .font-display {
     font-family: var(--font-display);
     font-weight: 700;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
   }
   [dir="rtl"] :is(h1, h2, h3, .font-display) { font-family: var(--font-arabic); letter-spacing: 0; }
   :focus-visible {
@@ -58,8 +62,11 @@
 }
 
 @layer components {
-  .btn-primary { @apply inline-flex items-center gap-2 rounded-md px-5 py-3 font-semibold transition-colors bg-primaire text-white hover:bg-encre; }
-  .btn-secondary { @apply inline-flex items-center gap-2 rounded-md px-5 py-3 font-semibold transition-colors border border-primaire text-primaire hover:bg-primaire-clair; }
+  .btn-primary { @apply inline-flex items-center gap-2 rounded px-5 py-3 font-semibold transition-colors bg-accent text-encre hover:bg-accent-fonce; }
+  .btn-secondary { @apply inline-flex items-center gap-2 rounded px-5 py-3 font-semibold transition-colors border-2 border-primaire text-primaire hover:bg-primaire-clair; }
+  /* Filet sous l'en-tête : cyan puis jaune, comme les couleurs du logo. */
+  .filet-logo { height: 6px; background: linear-gradient(90deg, var(--color-secondaire) 0 70%, var(--color-accent) 70% 100%); }
+  [dir="rtl"] .filet-logo { background: linear-gradient(-90deg, var(--color-secondaire) 0 70%, var(--color-accent) 70% 100%); }
   .container-x { @apply mx-auto w-full max-w-7xl px-4 md:px-6; }
 }
 
