@@ -4,7 +4,7 @@ export interface Marker { lat: number; lng: number; title: string; href?: string
 interface Props { markers: Marker[]; center?: [number, number]; zoom?: number; class?: string }
 const { markers, center = [35.835, 10.63], zoom = 13, class: cls = 'h-[420px]' } = Astro.props;
 ---
-<div class:list={['leaflet-map w-full rounded-2xl overflow-hidden border border-sable-300', cls]}
+<div class:list={['leaflet-map w-full rounded-2xl overflow-hidden border border-bordure', cls]}
      data-markers={JSON.stringify(markers)}
      data-center={JSON.stringify(center)}
      data-zoom={zoom}

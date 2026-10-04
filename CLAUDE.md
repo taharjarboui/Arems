@@ -6,7 +6,7 @@ Site de l'Association de Recherche et d'Études de la ville de Sousse (AREMS), d
 Développeur full-stack **et** rédacteur de vulgarisation naturaliste. Les textes doivent être exacts (noms scientifiques, statuts de conservation, lieux, dates), clairs pour le grand public, engagés sans être alarmistes ni moralisateurs. En cas de doute sur un fait scientifique ou historique, le signaler avec « (à confirmer) » plutôt que d'inventer. Ne jamais recopier une donnée de l'ancien site sans l'avoir vérifiée (voir « Contenu à corriger »).
 
 ## Stack
-Même stack que Visit Soussa : Astro (statique, adaptateur `@astrojs/vercel` pour la seule route serveur `/api/contact`) + Tailwind CSS v4 (tokens dans `src/styles/global.css`, pas de `tailwind.config`) + Leaflet/OSM pour les cartes des sentiers + Open-Meteo pour la météo (gratuit, sans clé, appelé côté client). Pas de framework UI (pas de React) sauf besoin réel. Contenu en Markdown dans `src/content/`, validé par `src/content.config.ts`. Pas de PHP, pas de base de données.
+Astro (statique, adaptateur `@astrojs/vercel` pour la seule route serveur `/api/contact`) + Tailwind CSS v4 (tokens dans `src/styles/global.css`, pas de `tailwind.config`) + Leaflet/OSM pour les cartes des sentiers + Open-Meteo pour la météo (gratuit, sans clé, appelé côté client). Pas de framework UI (pas de React) sauf besoin réel. Contenu en Markdown dans `src/content/`, validé par `src/content.config.ts`. Pas de PHP, pas de base de données.
 
 ## Multilingue
 Architecture trilingue : `fr` (défaut), `ar` (RTL), `en`. **La v1 ne publie que le français** : `publishedLangs` dans `src/i18n/ui.ts` décide des langues générées et proposées dans le sélecteur ; on y ajoute `ar` puis `en` quand leur contenu est prêt. Tout texte d'interface passe par `src/i18n/ui.ts`, jamais en dur dans les composants. Les URL sont préfixées par la langue (`/fr/…`) ; les segments de rubrique sont définis dans `sections` de `ui.ts`. Utiliser les propriétés logiques CSS (`ps-`, `ms-`, `start-`) pour que l'arabe fonctionne. Priorité de traduction : FR, puis AR (public local, écoles), puis EN.
@@ -21,7 +21,9 @@ Architecture trilingue : `fr` (défaut), `ar` (RTL), `en`. **La v1 ne publie que
 - Données de l'association (nom officiel, contacts, réseaux sociaux, coordonnées par défaut) : `src/config/association.ts`, jamais en dur dans les composants.
 
 ## Design
-Palette « Sebkha » (proposition, à valider avec le logo de l'association) : vert roseau `roseau-800` (principal, proche du `#123c22` de l'ancien site), bleu-gris `eau-600` (liens, cartes), rose flamant `flamant-500` (appels à l'action, avec parcimonie), sable et fond blanc sel. Mêmes polices que Visit Soussa pour garder un air de famille : titres en Fraunces, corps en Figtree, arabe en Noto Naskh Arabic. Fiches espèces : grande photo, nom vernaculaire puis nom scientifique en italique, badge de statut UICN coloré selon le code officiel, lecteur audio natif (`<audio>`) quand un son existe. Pas de cartes à ombre grise, pas d'étiquettes en capitales, pas d'animations d'apparition.
+**AREMS a sa propre identité, sans aucun point commun visuel ni structurel avec d'autres sites du même auteur (en particulier Visit Soussa)** : ni palette, ni polices, ni signature graphique, ni composants, ni mise en page partagés. Seule la stack technique est la même.
+
+Direction visuelle à fixer en phase 1, à partir du logo de l'association (bleu roi, cyan, jaune ; texte arabe « جمعية البحوث والدراسات في ذاكرة سوسة ») et de son sujet (zones humides, oiseaux, flore des sebkhas). En attendant, `global.css` définit des tokens sémantiques provisoires (`encre`, `primaire`, `accent`, `fond`, `fond-alt`, `bordure`) aux couleurs du logo et des polices système ; les composants n'utilisent que ces noms. Fiches espèces : grande photo, nom vernaculaire puis nom scientifique en italique, badge de statut UICN coloré selon le code officiel, lecteur audio natif (`<audio>`) quand un son existe.
 
 ## Conventions
 - Une fiche = un fichier `src/content/<collection>/<lang>/<slug>.md` ; même slug dans chaque langue. Slug = nom vernaculaire FR en kebab-case (`flamant-rose`, `heron-cendre`).
@@ -35,7 +37,7 @@ Palette « Sebkha » (proposition, à valider avec le logo de l'association) : v
 ## État du projet (4 octobre 2026)
 Le projet vit dans `AREMS/site/`, dépôt https://github.com/taharjarboui/Arems (branche `main`). La refonte suit `docs/plan-refonte.md`.
 
-- **Phase 0 faite (4 octobre 2026)** : squelette repris de Visit Soussa, `npm run build` passe (accueil provisoire, contact, 404 ; FR seulement via `publishedLangs`). Identité dans `src/config/association.ts` (nom complet d'après le logo : « جمعية البحوث والدراسات في ذاكرة سوسة », graphie française officielle à confirmer). Palette encore celle de Visit Soussa (`mer`, `soleil`, `sable`), remplacée en phase 1. Logo provisoire : `public/images/logo.png` (repris de l'ancien site, bleu roi, cyan, jaune).
+- **Phase 0 faite (4 octobre 2026)** : squelette Astro, `npm run build` passe (accueil provisoire, contact, 404 ; FR seulement via `publishedLangs`). Identité dans `src/config/association.ts` (nom complet d'après le logo : « جمعية البحوث والدراسات في ذاكرة سوسة », graphie française officielle à confirmer). Tokens de couleur sémantiques provisoires (couleurs du logo), polices système ; direction visuelle définitive en phase 1. Logo provisoire : `public/images/logo.png` (repris de l'ancien site, bleu roi, cyan, jaune).
 - Prochaine étape : phase 1.
 
 Le nouveau site a d'abord été développé en PHP/Symfony 7.3 (`../arems-main/`) : son périmètre fonctionnel et son contenu sont la référence, mais sa stack est abandonnée et il ne démarre pas en l'état. Ce que `../arems-main/` apporte :
@@ -58,11 +60,10 @@ Erreurs relevées dans le dump, à ne pas reprendre telles quelles :
 - « Oued Soud » : vérifier la graphie officielle (le site Ramsar s'appelle peut-être « Sebkhet Halk El Menzel et Oued Essed », à confirmer).
 
 ## Décisions prises
-- Site PHP/Symfony abandonné : contenu quasi statique, aucune raison de maintenir un serveur PHP et une base MySQL. Même stack et même hébergement que Visit Soussa pour mutualiser composants, savoir-faire et maintenance.
+- Site PHP/Symfony abandonné : contenu quasi statique, aucune raison de maintenir un serveur PHP et une base MySQL. Stack Astro + Vercel retenue pour sa simplicité d'hébergement et de maintenance. Le code, les composants et l'identité visuelle sont propres à AREMS.
 - Hébergement : Vercel (compte existant). Si l'offre Hobby ne suffit pas (usage associatif et dons possibles : à vérifier dans les conditions Vercel), migrer vers Cloudflare Pages.
-- Contenu en Markdown d'abord ; Sanity (CMS headless) plus tard, quand les membres de l'association devront publier eux-mêmes (actions, actualités). Les gabarits passent par les collections Astro, donc la bascule ne touchera que `content.config.ts`. Utiliser le même projet Sanity que Visit Soussa si possible (datasets séparés).
-- Formulaire de contact comme sur Visit Soussa : `/api/contact` → Resend. Aucune adresse e-mail affichée sur le site. Variables `RESEND_API_KEY`, `CONTACT_TO`, `CONTACT_FROM` dans Vercel ; `CONTACT_FROM` sur le domaine de l'association, l'adresse du visiteur en `replyTo`.
-- Lien croisé avec Visit Soussa : les sentiers et sites naturels d'AREMS peuvent être cités dans la rubrique Expériences de Visit Soussa, avec lien vers `memoires-sousse.org`.
+- Contenu en Markdown d'abord ; Sanity (CMS headless) plus tard, quand les membres de l'association devront publier eux-mêmes (actions, actualités). Les gabarits passent par les collections Astro, donc la bascule ne touchera que `content.config.ts`. Projet Sanity propre à AREMS.
+- Formulaire de contact : `/api/contact` → Resend. Aucune adresse e-mail affichée sur le site. Variables `RESEND_API_KEY`, `CONTACT_TO`, `CONTACT_FROM` dans Vercel ; `CONTACT_FROM` sur le domaine de l'association, l'adresse du visiteur en `replyTo`.
 
 ## Prochaines étapes
 Voir `docs/plan-refonte.md` (phases 0 à 9). Mettre à jour la section « État du projet » à la fin de chaque phase.

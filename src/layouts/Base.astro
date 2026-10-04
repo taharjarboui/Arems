@@ -41,12 +41,6 @@ const ogImage = new URL(image ?? '/images/logo.png', Astro.site);
     {description && <meta property="og:description" content={description} />}
     <meta property="og:image" content={ogImage} />
     <meta property="og:locale" content={lang === 'fr' ? 'fr_FR' : lang === 'en' ? 'en_GB' : 'ar_TN'} />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Fraunces:opsz,wght,SOFT@9..144,400;9..144,600;9..144,700,30&family=Noto+Naskh+Arabic:wght@400;600;700&display=swap"
-      rel="stylesheet"
-    />
   </head>
   <body class="min-h-screen flex flex-col">
     <Header lang={lang} alternates={alternates} />

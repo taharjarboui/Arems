@@ -47,7 +47,7 @@ Aucune redirection depuis les anciennes URL Symfony : le site PHP n'a jamais ét
 | `/contact` | `/fr/contact` + `POST /api/contact` |
 | — | `/404`, sitemap, redirection `/` → `/fr/` |
 
-Les segments d'URL sont traduits dans `sections` de `ui.ts`, comme sur Visit Soussa.
+Les segments d'URL sont traduits dans `sections` de `ui.ts`.
 
 ### Gabarits (Twig → composants Astro)
 
@@ -89,7 +89,7 @@ Tout ce qui viendra de l'association a un emplacement unique, connu d'avance :
 ## Phases
 
 ### Phase 0 — Préparation
-- Créer `AREMS/site/` à partir du squelette de Visit Soussa (copie locale `Visit Soussa/site/`) : garder la config Astro, Vercel et Tailwind, l'i18n, le layout, les composants génériques (Header, Footer, Card, Map, SectionHeading), la page contact et `api/contact.ts`. Retirer le contenu, les images et les pages propres à Visit Soussa.
+- Créer `AREMS/site/` : config Astro, Vercel et Tailwind, i18n, layout, Header, Footer, Map, page contact et `api/contact.ts`. Aucune identité visuelle ni composant partagé avec un autre site : tokens sémantiques provisoires aux couleurs du logo, polices système.
 - Adapter l'identité : nom, domaine `memoires-sousse.org`, expéditeur par défaut, `publishedLangs = ['fr']`.
 - `CLAUDE.md` (la consigne), `docs/plan-refonte.md` (ce plan), `README.md`, `.env.example`.
 - `git init`, premier commit, push sur `taharjarboui/Arems`.
@@ -97,7 +97,7 @@ Tout ce qui viendra de l'association a un emplacement unique, connu d'avance :
 **Fini quand** : `npm run build` passe (accueil provisoire, contact, 404), et le dépôt est sur GitHub.
 
 ### Phase 1 — Fondations
-- `global.css` : palette Sebkha (`roseau`, `eau`, `flamant`, `sable`, `sel`), couleurs officielles des badges UICN.
+- Direction visuelle propre à AREMS (à partir du logo et du sujet) : valeurs définitives des tokens de `global.css`, typographie (latin + arabe), signature graphique ; couleurs officielles des badges UICN.
 - `ui.ts` : libellés FR complets (AR et EN : mêmes clés, à traduire plus tard), `sections`.
 - `content.config.ts` : schémas Zod de `especes`, `sites`, `sentiers`, `actions`, `partenaires`, `pages`, avec le champ `aCompleter`. Schéma des fichiers `src/data/geo/*.json`.
 - `src/config/association.ts`, `docs/contenu-a-fournir.md`, script `npm run todo`.
@@ -149,4 +149,4 @@ Au fil de l'eau, selon `docs/contenu-a-fournir.md` et la logique de mise à jour
 Traduire `ui.ts` puis le contenu en AR, puis en EN (même slug), et ajouter la langue à `publishedLangs`.
 
 ### Phase 9 — Après la parité
-Page S'engager, Actualités, Plausible, Sanity (seul `content.config.ts` change), lien croisé avec Visit Soussa, archivage de `arems-main/`.
+Page S'engager, Actualités, Plausible, Sanity (seul `content.config.ts` change), archivage de `arems-main/`.

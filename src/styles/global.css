@@ -1,53 +1,45 @@
 @import "tailwindcss";
 
 /* ------------------------------------------------------------------
-   Palette « Méditerranée sousienne »
-   Tirée du logo (sarcelle, soleil, sable) et des portes de la médina.
+   Tokens de couleur et de typographie.
+   Valeurs PROVISOIRES tirées du logo AREMS (bleu roi, cyan, jaune) :
+   la direction visuelle définitive est fixée en phase 1.
+   Les composants n'utilisent que ces noms sémantiques, jamais de couleur en dur.
    ------------------------------------------------------------------ */
 @theme {
-  --color-mer-900: #0f3a44;   /* encre : texte, fonds profonds        */
-  --color-mer-700: #1b6f80;   /* sarcelle du logo : couleur principale */
-  --color-mer-500: #2a8fa3;
-  --color-mer-300: #6cc4c9;   /* lagune : accents clairs               */
-  --color-mer-100: #d9eef0;
+  --color-encre: #14213d;         /* texte principal                    */
+  --color-primaire: #1e4fbf;      /* bleu du logo : liens, navigation   */
+  --color-primaire-clair: #e3ebfa;
+  --color-accent: #ffd60a;        /* jaune du logo : appels à l'action  */
+  --color-accent-fonce: #e6bf00;
+  --color-accent-clair: #fff6c7;
+  --color-fond: #ffffff;
+  --color-fond-alt: #f3f6f9;      /* fond des sections alternées        */
+  --color-bordure: #d5dde6;
 
-  --color-soleil-600: #d9821a;
-  --color-soleil-500: #f39c2b; /* soleil du logo : appels à l'action   */
-  --color-soleil-100: #fdebd0;
-
-  --color-sable-500: #c9a66b;  /* pierre des remparts                  */
-  --color-sable-300: #e8c58f;  /* sable du logo                        */
-  --color-sable-100: #f3e6cf;
-
-  --color-chaux: #faf7f0;      /* fond général                         */
-  --color-chaux-2: #f1ebdf;    /* fond des sections alternées          */
-
-  --font-display: "Fraunces", "Georgia", serif;
-  --font-sans: "Figtree", system-ui, sans-serif;
-  --font-arabic: "Noto Naskh Arabic", "Noto Sans Arabic", serif;
-
-  --radius-arch: 999px 999px 0 0;
+  /* Polices système en attendant le choix typographique de la phase 1. */
+  --font-display: ui-sans-serif, system-ui, sans-serif;
+  --font-sans: ui-sans-serif, system-ui, sans-serif;
+  --font-arabic: "Geeza Pro", "Segoe UI", "Noto Sans Arabic", sans-serif;
 }
 
 @layer base {
-  html { scroll-behavior: smooth; }
   body {
-    background: var(--color-chaux);
-    color: var(--color-mer-900);
+    background: var(--color-fond);
+    color: var(--color-encre);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
   }
   [dir="rtl"] body { font-family: var(--font-arabic); }
-  [dir="rtl"] .font-display { font-family: var(--font-arabic); font-weight: 700; }
-
   h1, h2, h3, .font-display {
     font-family: var(--font-display);
-    font-variation-settings: "opsz" 144, "SOFT" 30;
-    letter-spacing: -0.01em;
+    font-weight: 700;
+    letter-spacing: -0.02em;
   }
+  [dir="rtl"] :is(h1, h2, h3, .font-display) { font-family: var(--font-arabic); letter-spacing: 0; }
   :focus-visible {
-    outline: 3px solid var(--color-soleil-500);
-    outline-offset: 3px;
+    outline: 3px solid var(--color-primaire);
+    outline-offset: 2px;
   }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition: none !important; }
@@ -55,31 +47,16 @@
 }
 
 @layer components {
-  /* L'arc outrepassé : signature visuelle du site, utilisé pour les photos. */
-  .arch {
-    border-radius: 50% 50% 8px 8px / 42% 42% 8px 8px;
-    overflow: hidden;
-  }
-  .arch-sm {
-    border-radius: 50% 50% 6px 6px / 30% 30% 6px 6px;
-    overflow: hidden;
-  }
-
-  .btn {
-    @apply inline-flex items-center gap-2 rounded-full px-6 py-3 font-semibold transition-colors;
-  }
-  .btn-primary { @apply inline-flex items-center gap-2 rounded-full px-6 py-3 font-semibold transition-colors bg-soleil-500 text-mer-900 hover:bg-soleil-600; }
-  .btn-ghost   { @apply inline-flex items-center gap-2 rounded-full px-6 py-3 font-semibold transition-colors border-2 border-mer-700 text-mer-700 hover:bg-mer-700 hover:text-white; }
-  .btn-light   { @apply inline-flex items-center gap-2 rounded-full px-6 py-3 font-semibold transition-colors border-2 border-white/70 text-white hover:bg-white hover:text-mer-900; }
-
-  .container-x { @apply mx-auto w-full max-w-6xl px-5 md:px-8; }
+  .btn-primary { @apply inline-flex items-center gap-2 rounded-md px-5 py-3 font-semibold transition-colors bg-primaire text-white hover:bg-encre; }
+  .btn-secondary { @apply inline-flex items-center gap-2 rounded-md px-5 py-3 font-semibold transition-colors border border-primaire text-primaire hover:bg-primaire-clair; }
+  .container-x { @apply mx-auto w-full max-w-7xl px-4 md:px-6; }
 }
 
 /* Carte Leaflet */
 .leaflet-container { font-family: inherit; }
 .marker-pin {
-  width: 18px; height: 18px; border-radius: 50%;
-  background: var(--color-soleil-500);
-  border: 3px solid var(--color-chaux);
-  box-shadow: 0 0 0 2px var(--color-mer-700);
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--color-primaire);
+  border: 3px solid var(--color-fond);
+  box-shadow: 0 0 0 1px var(--color-encre);
 }

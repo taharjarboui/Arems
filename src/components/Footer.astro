@@ -6,26 +6,22 @@ interface Props { lang: Lang }
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 const year = new Date().getFullYear();
-// Partenaires (collection `partenaires`) et réseaux sociaux ajoutés en phase 1.
+// Partenaires (collection `partenaires`) ajoutés en phase 1.
 ---
-<footer class="mt-24 bg-mer-900 text-chaux">
-  <div class="h-3 bg-soleil-500"></div>
-  <div class="container-x grid gap-10 py-14 md:grid-cols-[1.4fr_1fr]">
-    <div>
-      <img src="/images/logo.png" alt={association.sigle} width="579" height="366" class="h-16 w-auto rounded-xl" />
-      <h2 class="mt-5 text-xl">{t('footer.about')}</h2>
-      <p class="mt-2 max-w-md text-chaux/80 leading-relaxed">{association.nom}</p>
-      <p class="mt-1 max-w-md text-chaux/80 leading-relaxed" lang="ar" dir="rtl">{association.nomAr}</p>
+<footer class="mt-20 border-t border-bordure bg-fond-alt">
+  <div class="container-x flex flex-col gap-8 py-10 md:flex-row md:items-start md:justify-between">
+    <div class="flex items-start gap-4">
+      <img src="/images/logo.png" alt={association.sigle} width="579" height="366" class="h-14 w-auto" />
+      <div class="text-sm leading-relaxed">
+        <p class="font-semibold">{association.nom}</p>
+        <p class="text-encre/70" lang="ar" dir="rtl">{association.nomAr}</p>
+        {association.adresse && <p class="mt-2 text-encre/70">{association.adresse}</p>}
+      </div>
     </div>
-    <div>
-      <h2 class="text-xl">{t('footer.contact')}</h2>
-      <ul class="mt-3 space-y-2 text-chaux/80">
-        <li><a class="hover:text-soleil-500" href={contactUrl(lang)}>{t('contact.title')}</a></li>
-        {association.reseaux.map((r) => <li><a class="hover:text-soleil-500" href={r.url} rel="noopener">{r.nom}</a></li>)}
-      </ul>
-    </div>
+    <ul class="flex flex-wrap gap-x-6 gap-y-2 text-sm">
+      <li><a class="text-primaire hover:underline" href={contactUrl(lang)}>{t('contact.title')}</a></li>
+      {association.reseaux.map((r) => <li><a class="text-primaire hover:underline" href={r.url} rel="noopener">{r.nom}</a></li>)}
+    </ul>
   </div>
-  <div class="border-t border-chaux/10">
-    <p class="container-x py-5 text-sm text-chaux/60">© {year} {association.sigle}. {t('footer.rights')}</p>
-  </div>
+  <p class="container-x border-t border-bordure py-4 text-xs text-encre/60">© {year} {association.sigle}. {t('footer.rights')}</p>
 </footer>

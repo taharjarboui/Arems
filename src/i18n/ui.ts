@@ -43,13 +43,13 @@ const fr = {
   'contact.message': 'Votre message',
   'contact.send': 'Envoyer',
   'contact.sending': 'Envoi en cours…',
-  'contact.success': 'Merci, votre message est bien parti. Nous vous répondrons par e-mail.',
-  'contact.error': 'Le message n’a pas pu être envoyé. Vérifiez les champs et réessayez dans un instant.',
-  'contact.privacy': 'Votre nom et votre adresse servent uniquement à vous répondre. Ils ne sont ni publiés ni transmis à des tiers.',
+  'contact.success': 'Message reçu. Un membre de l’association vous répondra par e-mail.',
+  'contact.error': 'L’envoi a échoué. Vérifiez votre adresse e-mail et votre message, puis réessayez.',
+  'contact.privacy': 'Vos coordonnées ne servent qu’à traiter votre demande ; elles ne sont pas conservées sur ce site.',
   'card.read': 'Lire la fiche',
   'empty': 'Cette rubrique est en cours de rédaction.',
-  '404.title': 'Ce sentier ne mène nulle part.',
-  '404.text': 'La page demandée n’existe pas ou a été déplacée.',
+  '404.title': 'Page introuvable',
+  '404.text': 'L’adresse saisie ne correspond à aucune page du site.',
   '404.back': 'Retour à l’accueil',
 } as const;
 
