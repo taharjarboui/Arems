@@ -1,0 +1,37 @@
+---
+/** Carte Leaflet + OpenStreetMap. Les marqueurs sont passés en JSON, Leaflet n'est chargé que côté client. */
+export interface Marker { lat: number; lng: number; title: string; href?: string }
+interface Props { markers: Marker[]; center?: [number, number]; zoom?: number; class?: string }
+const { markers, center = [35.835, 10.63], zoom = 13, class: cls = 'h-[420px]' } = Astro.props;
+---
+<div class:list={['leaflet-map w-full rounded-2xl overflow-hidden border border-sable-300', cls]}
+     data-markers={JSON.stringify(markers)}
+     data-center={JSON.stringify(center)}
+     data-zoom={zoom}
+     role="region" aria-label="Carte"></div>
+
+<script>
+  import L from 'leaflet';
+  import 'leaflet/dist/leaflet.css';
+
+  document.querySelectorAll<HTMLElement>('.leaflet-map').forEach((el) => {
+    const markers = JSON.parse(el.dataset.markers ?? '[]') as { lat: number; lng: number; title: string; href?: string }[];
+    const center = JSON.parse(el.dataset.center ?? '[35.835,10.63]') as [number, number];
+    const zoom = Number(el.dataset.zoom ?? 13);
+
+    const map = L.map(el, { scrollWheelZoom: false }).setView(center, zoom);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    }).addTo(map);
+
+    const icon = L.divIcon({ className: '', html: '<div class="marker-pin"></div>', iconSize: [18, 18], iconAnchor: [9, 9] });
+    const group = L.featureGroup();
+    for (const m of markers) {
+      const label = m.href ? `<a href="${m.href}"><strong>${m.title}</strong></a>` : `<strong>${m.title}</strong>`;
+      L.marker([m.lat, m.lng], { icon }).bindPopup(label).addTo(group);
+    }
+    group.addTo(map);
+    if (markers.length > 1) map.fitBounds(group.getBounds().pad(0.2));
+  });
+</script>

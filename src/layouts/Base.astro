@@ -1,0 +1,58 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { isRtl, useTranslations } from '../i18n/utils';
+import type { Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  title: string;
+  description?: string;
+  image?: string;
+  /** Chemins équivalents dans les autres langues, pour hreflang et le sélecteur */
+  alternates?: Partial<Record<Lang, string>>;
+}
+
+const { lang, title, description, image, alternates = {} } = Astro.props;
+const t = useTranslations(lang);
+const siteName = t('site.name');
+const fullTitle = title === siteName ? `${siteName} — ${t('site.tagline')}` : `${title} · ${siteName}`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+// Image de partage par défaut : le logo, en attendant une vraie image (public/images/og-default.jpg).
+const ogImage = new URL(image ?? '/images/logo.png', Astro.site);
+---
+<!doctype html>
+<html lang={lang} dir={isRtl(lang) ? 'rtl' : 'ltr'}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    {description && <meta name="description" content={description} />}
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/png" href="/images/logo.png" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    {Object.entries(alternates).map(([l, path]) => (
+      <link rel="alternate" hreflang={l} href={new URL(path!, Astro.site)} />
+    ))}
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:title" content={fullTitle} />
+    {description && <meta property="og:description" content={description} />}
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content={lang === 'fr' ? 'fr_FR' : lang === 'en' ? 'en_GB' : 'ar_TN'} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Fraunces:opsz,wght,SOFT@9..144,400;9..144,600;9..144,700,30&family=Noto+Naskh+Arabic:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="min-h-screen flex flex-col">
+    <Header lang={lang} alternates={alternates} />
+    <main class="flex-1">
+      <slot />
+    </main>
+    <Footer lang={lang} />
+  </body>
+</html>

@@ -1,0 +1,103 @@
+---
+import Base from '../../layouts/Base.astro';
+import type { Lang } from '../../i18n/ui';
+import { useTranslations, langPaths } from '../../i18n/utils';
+import { contactAlternates } from '../../lib/content';
+
+// Le formulaire est envoyé à /api/contact (src/pages/api/contact.ts), qui transmet le message
+// par e-mail via Resend. L'adresse de réception n'apparaît jamais sur le site.
+
+export function getStaticPaths() {
+  return langPaths();
+}
+
+const lang = Astro.params.lang as Lang;
+const t = useTranslations(lang);
+const subjects = ['benevolat', 'partenariat', 'scolaires', 'observation', 'presse', 'autre'] as const;
+
+const field = 'mt-2 block w-full rounded-xl border border-sable-300 bg-white/70 px-4 py-3 text-mer-900 transition-colors focus:border-mer-700 focus:outline-none';
+---
+<Base lang={lang} title={t('contact.title')} description={t('contact.intro')} alternates={contactAlternates()}>
+  <section class="container-x pt-12 pb-10 md:pt-20">
+    <h1 class="text-5xl md:text-6xl">{t('contact.title')}</h1>
+    <p class="mt-4 max-w-2xl text-xl leading-relaxed text-mer-900/75">{t('contact.intro')}</p>
+  </section>
+
+  <section class="container-x pb-20">
+    <form
+      id="contact-form"
+      action="/api/contact"
+      method="POST"
+      class="max-w-2xl space-y-6"
+      data-sending={t('contact.sending')}
+    >
+      <input type="hidden" name="langue" value={lang} />
+      <!-- Piège à robots : champ invisible que seuls les spams remplissent -->
+      <input type="text" name="site_web" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true" />
+
+      <div class="grid gap-6 sm:grid-cols-2">
+        <label class="block font-medium">
+          {t('contact.name')}
+          <input type="text" name="nom" required autocomplete="name" maxlength="120" class={field} />
+        </label>
+        <label class="block font-medium">
+          {t('contact.email')}
+          <input type="email" name="email" required autocomplete="email" maxlength="200" class={field} />
+        </label>
+      </div>
+
+      <label class="block font-medium">
+        {t('contact.subject')}
+        <select name="sujet" class={field}>
+          {subjects.map((s) => <option value={t(`contact.subject.${s}`)}>{t(`contact.subject.${s}`)}</option>)}
+        </select>
+      </label>
+
+      <label class="block font-medium">
+        {t('contact.message')}
+        <textarea name="message" required rows="7" maxlength="5000" class={field}></textarea>
+      </label>
+
+      <p class="text-sm text-mer-900/60">{t('contact.privacy')}</p>
+
+      <button type="submit" class="btn-primary disabled:opacity-60">{t('contact.send')}</button>
+
+      <p id="contact-success" class="hidden target:block rounded-xl border border-mer-300 bg-mer-100 px-4 py-3" role="status">{t('contact.success')}</p>
+      <p id="contact-error" class="hidden target:block rounded-xl border border-soleil-500 bg-soleil-100 px-4 py-3" role="alert">{t('contact.error')}</p>
+    </form>
+  </section>
+</Base>
+
+<script>
+  // Sans JavaScript, le formulaire s'envoie normalement et /api/contact renvoie sur cette page
+  // avec #contact-success ou #contact-error. Avec JavaScript, on affiche le résultat sans recharger.
+  const form = document.getElementById('contact-form') as HTMLFormElement | null;
+  const success = document.getElementById('contact-success');
+  const error = document.getElementById('contact-error');
+
+  form?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const button = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+    const label = button.textContent;
+    button.disabled = true;
+    button.textContent = form.dataset.sending ?? label;
+    success?.classList.add('hidden');
+    error?.classList.add('hidden');
+
+    try {
+      const response = await fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { Accept: 'application/json' },
+      });
+      if (!response.ok) throw new Error(String(response.status));
+      form.reset();
+      success?.classList.remove('hidden');
+    } catch {
+      error?.classList.remove('hidden');
+    } finally {
+      button.disabled = false;
+      button.textContent = label;
+    }
+  });
+</script>

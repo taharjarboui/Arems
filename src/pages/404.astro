@@ -1,0 +1,13 @@
+---
+import Base from '../layouts/Base.astro';
+import { defaultLang } from '../i18n/ui';
+import { useTranslations, homeUrl } from '../i18n/utils';
+const t = useTranslations(defaultLang);
+---
+<Base lang={defaultLang} title={t('404.title')}>
+  <section class="container-x py-32 text-center">
+    <h1 class="text-5xl">{t('404.title')}</h1>
+    <p class="mt-4 text-lg text-mer-900/75">{t('404.text')}</p>
+    <a href={homeUrl(defaultLang)} class="btn-primary mt-8">{t('404.back')}</a>
+  </section>
+</Base>

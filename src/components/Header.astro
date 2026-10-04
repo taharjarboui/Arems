@@ -1,0 +1,67 @@
+---
+import { languages, publishedLangs, type Lang } from '../i18n/ui';
+import { useTranslations, homeUrl, contactUrl } from '../i18n/utils';
+import { association } from '../config/association';
+
+interface Props { lang: Lang; alternates?: Partial<Record<Lang, string>> }
+const { lang, alternates = {} } = Astro.props;
+const t = useTranslations(lang);
+
+// Rubriques ajoutées en phase 1 (Biodiversité, Sites & sentiers, Actions, Association).
+const nav: { href: string; label: string }[] = [
+  { href: contactUrl(lang), label: t('contact.title') },
+];
+const current = Astro.url.pathname;
+---
+<header class="sticky top-0 z-40 bg-chaux/90 backdrop-blur border-b border-sable-300/60">
+  <div class="container-x flex items-center justify-between gap-6 py-3">
+    <a href={homeUrl(lang)} class="flex items-center gap-3 shrink-0" aria-label={association.sigle}>
+      <img src="/images/logo.png" alt="" width="579" height="366" class="h-10 w-auto rounded" />
+      <span class="font-display text-xl font-semibold text-mer-700 hidden sm:inline">{association.sigle}</span>
+    </a>
+
+    <nav class="hidden md:flex items-center gap-1" aria-label="Navigation principale">
+      {nav.map(({ href, label }) => {
+        const active = current.startsWith(href);
+        return (
+          <a href={href}
+             class:list={['px-4 py-2 rounded-full font-medium transition-colors', active ? 'bg-mer-700 text-white' : 'text-mer-900 hover:bg-mer-100']}
+             aria-current={active ? 'page' : undefined}>{label}</a>
+        );
+      })}
+    </nav>
+
+    <div class="flex items-center gap-2">
+      {publishedLangs.length > 1 && (
+        <nav aria-label={t('nav.lang')} class="flex items-center rounded-full border border-mer-700/30 p-0.5 text-sm">
+          {publishedLangs.map((l) => (
+            <a href={alternates[l] ?? homeUrl(l)}
+               hreflang={l}
+               lang={l}
+               title={languages[l]}
+               class:list={['px-2.5 py-1 rounded-full', l === lang ? 'bg-mer-700 text-white' : 'text-mer-700 hover:bg-mer-100']}
+               aria-current={l === lang ? 'true' : undefined}>{l.toUpperCase()}</a>
+          ))}
+        </nav>
+      )}
+      <button id="menu-toggle" class="md:hidden p-2 rounded-full hover:bg-mer-100" aria-expanded="false" aria-controls="menu-mobile" aria-label={t('nav.menu')}>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </div>
+  <div id="menu-mobile" class="md:hidden hidden border-t border-sable-300/60">
+    <nav class="container-x flex flex-col py-2">
+      {nav.map(({ href, label }) => (
+        <a href={href} class="py-3 font-medium border-b border-sable-100 last:border-0">{label}</a>
+      ))}
+    </nav>
+  </div>
+</header>
+<script>
+  const btn = document.getElementById('menu-toggle');
+  const menu = document.getElementById('menu-mobile');
+  btn?.addEventListener('click', () => {
+    const open = menu?.classList.toggle('hidden') === false;
+    btn.setAttribute('aria-expanded', String(open));
+  });
+</script>
