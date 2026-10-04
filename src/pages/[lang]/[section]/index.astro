@@ -1,0 +1,41 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { publishedLangs, sections, type Lang, type SectionKey } from '../../../i18n/ui';
+import { useTranslations, sectionUrl, splitId } from '../../../i18n/utils';
+import { entriesFor, sectionAlternates } from '../../../lib/content';
+
+// Liste provisoire d'une rubrique (phase 1). Chaque rubrique reçoit sa propre mise en page en phase 3.
+
+export function getStaticPaths() {
+  return publishedLangs.flatMap((lang) =>
+    (Object.keys(sections) as SectionKey[]).map((key) => ({ params: { lang, section: sections[key].path[lang] }, props: { key } })),
+  );
+}
+
+const lang = Astro.params.lang as Lang;
+const { key } = Astro.props as { key: SectionKey };
+const t = useTranslations(lang);
+const entries = await entriesFor(sections[key].collection, lang);
+const title = t(`section.${key}.title`);
+const intro = t(`section.${key}.intro`);
+---
+<Base lang={lang} title={title} description={intro} alternates={sectionAlternates(key)}>
+  <section class="container-x pt-12 pb-8 md:pt-16">
+    <h1 class="text-4xl md:text-5xl">{title}</h1>
+    <p class="mt-4 max-w-2xl text-lg leading-relaxed text-encre/75">{intro}</p>
+  </section>
+  <section class="container-x pb-16">
+    {entries.length === 0 ? (
+      <p class="text-encre/60">{t('empty')}</p>
+    ) : (
+      <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {entries.map((e) => (
+          <li>
+            <a href={sectionUrl(lang, key, splitId(e.id).slug)} class="font-semibold text-primaire hover:underline">{e.data.title}</a>
+            <p class="mt-1 text-encre/75">{e.data.summary}</p>
+          </li>
+        ))}
+      </ul>
+    )}
+  </section>
+</Base>

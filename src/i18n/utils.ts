@@ -1,4 +1,4 @@
-import { ui, defaultLang, rtlLangs, sections, languages, publishedLangs, type Lang, type UiKey, type SectionKey } from './ui';
+import { ui, defaultLang, rtlLangs, sections, pagePaths, languages, publishedLangs, type Lang, type UiKey, type SectionKey, type PageKey } from './ui';
 
 export function isLang(value: string | undefined): value is Lang {
   return value !== undefined && value in languages;
@@ -26,8 +26,18 @@ export function langPaths() {
 
 /** URL d'une section ("/fr/biodiversite") ou d'une fiche ("/fr/biodiversite/flamant-rose"). */
 export function sectionUrl(lang: Lang, section: SectionKey, slug?: string) {
-  const base = `/${lang}/${(sections[section] as { path: Record<Lang, string> }).path[lang]}`;
+  const base = `/${lang}/${sections[section].path[lang]}`;
   return slug ? `${base}/${slug}` : base;
+}
+
+/** Retrouve la section à partir d'un segment d'URL dans une langue donnée. */
+export function sectionFromPath(lang: Lang, segment: string): SectionKey | undefined {
+  return (Object.keys(sections) as SectionKey[]).find((k) => sections[k].path[lang] === segment);
+}
+
+/** URL d'une page simple ("/fr/association"). */
+export function pageUrl(lang: Lang, page: PageKey) {
+  return `/${lang}/${pagePaths[page][lang]}`;
 }
 
 export function homeUrl(lang: Lang) {

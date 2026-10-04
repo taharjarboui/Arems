@@ -1,0 +1,8 @@
+# Partenaires de l’association : une entrée par partenaire, logo dans public/images/partenaires/.
+# Exemple :
+# - id: commune-de-sousse
+#   nom: Commune de Sousse
+#   logo: /images/partenaires/commune-de-sousse.webp
+#   url: https://www.example.org
+#   aCompleter: true
+[]

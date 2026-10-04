@@ -11,7 +11,7 @@ Aucune redirection depuis les anciennes URL Symfony : le site PHP n'a jamais ét
 
 ## Décisions de cadrage (4 octobre 2026)
 - **Langues** : l'architecture est trilingue (`fr`, `ar`, `en` : routes, `ui.ts`, dossiers de contenu, RTL), mais **la v1 ne publie que le français**. La liste `publishedLangs` de `src/i18n/ui.ts` décide des langues générées et proposées dans le sélecteur. Ajouter `ar` ou `en` à cette liste suffit à publier une langue, une fois son contenu écrit.
-- **Carte des sentiers** : on garde le module (tracé, points numérotés, « me localiser »). Les coordonnées sortent du code et vont dans un fichier de configuration par sentier : `src/data/geo/<slug>.json`. Les coordonnées ne dépendent pas de la langue ; les textes des points restent dans le Markdown du sentier. Ajouter un sentier = un fichier Markdown + un fichier geo.
+- **Carte des sentiers** : on garde le module (tracé, points numérotés, « me localiser »). Les coordonnées sortent du code et vont dans un fichier de configuration par sentier : `src/data/geo/sentiers/<slug>.json`. Les coordonnées ne dépendent pas de la langue ; les textes des points restent dans le Markdown du sentier. Ajouter un sentier = un fichier Markdown + un fichier geo.
 - **Météo** : à développer avec une source gratuite, **Open-Meteo** (sans clé, sans compte, CORS autorisé, usage non commercial gratuit). Appel côté client depuis les coordonnées des sites ; le site reste statique.
 - **Contenu de l'association** (textes, logo, partenaires, contacts, traces GPS) : récupéré plus tard. On prépare les **emplacements** et une **logique de mise à jour** documentée. Rien n'est bloquant pour la mise en ligne.
 
@@ -24,7 +24,7 @@ Aucune redirection depuis les anciennes URL Symfony : le site PHP n'a jamais ét
 | Symfony | Astro | Remarques |
 |---|---|---|
 | `Espece` + `CategorieEspece` | collection `especes`, champ `categorie` (enum) | La catégorie devient un enum ; ses libellés vont dans `ui.ts`, ses images dans `public/images/categories/`. |
-| `ParcoursTouristique` + `PointInteret` | collection `sentiers` (textes) + `src/data/geo/<slug>.json` (coordonnées) | Le point d'intérêt n'a plus de page à lui : il devient une ancre `#point-n` sur la page du sentier. |
+| `ParcoursTouristique` + `PointInteret` | collection `sentiers` (textes) + `src/data/geo/sentiers/<slug>.json` (coordonnées) | Le point d'intérêt n'a plus de page à lui : il devient une ancre `#point-n` sur la page du sentier. |
 | `ActionEnvironnementale` + `DetailsAction` | collection `actions` | Les détails deviennent des sections `##` du corps Markdown ; les images (chaîne séparée par des virgules) deviennent `galerie: []`. |
 | `Partenaire` | collection de données `partenaires` (YAML) | Noms factices à remplacer. |
 | `Zone` (table vide) | collection `sites` | Oued Soud et Sebkhet Halk El Menzel ; les sentiers y sont rattachés. |
@@ -56,12 +56,12 @@ Les segments d'URL sont traduits dans `sections` de `ui.ts`.
 | `base.html.twig` (Bootstrap via CDN, Google Translate, Font Awesome) | `Base.astro`, `Header.astro`, `Footer.astro`. Bootstrap, Google Translate et Font Awesome ne sont pas repris : Tailwind, i18n natif et SVG inline. |
 | `home/index.html.twig` (710 lignes) | Un composant par section : `Hero`, `MeteoWidget`, `CategoryGrid`, `MissionBlock`, `ActionCards`, `TrailCards`, `PartnersStrip`, `JoinCta`. |
 | `categorie/show`, `espece/show`, `espece/detail` | `SpeciesCard.astro` + page espèce (photo, nom, nom scientifique, badge UICN, `<audio>`). |
-| `parcours/show` (carte Leaflet) | `TrailMap.astro` (lit `src/data/geo/<slug>.json`) + `PointList.astro`. |
+| `parcours/show` (carte Leaflet) | `TrailMap.astro` (lit `src/data/geo/sentiers/<slug>.json`) + `PointList.astro`. |
 | `action/detail` (galerie + zoom JS) | `Gallery.astro` (`<dialog>` natif). |
 | `contact/contact` | page contact + `api/contact.ts` (Resend). |
 
 ### Ce qui était factice dans l'ancien site, et ce qu'on en fait
-- **Carte** : le tracé et les points étaient codés en dur dans le template, à des coordonnées au hasard (`34.1 + Math.random()…`), au centre de la Tunisie. → Le module est gardé et lit `src/data/geo/<slug>.json`. Ces fichiers démarrent avec un centrage approximatif sur le site naturel et `"statut": "provisoire"`. La carte affiche alors la mention « Tracé indicatif » et pas de tracé inventé. On passe à `"verifie"` quand les traces GPS réelles sont saisies.
+- **Carte** : le tracé et les points étaient codés en dur dans le template, à des coordonnées au hasard (`34.1 + Math.random()…`), au centre de la Tunisie. → Le module est gardé et lit `src/data/geo/sentiers/<slug>.json`. Ces fichiers démarrent avec un centrage approximatif sur le site naturel et `"statut": "provisoire"`. La carte affiche alors la mention « Tracé indicatif » et pas de tracé inventé. On passe à `"verifie"` quand les traces GPS réelles sont saisies.
 - **Météo** : les valeurs étaient fixes (24 °C, 12 km/h, 65 %). → Widget réel avec Open-Meteo.
 - **Traduction** : Google Translate. → i18n natif, FR seulement en v1.
 - **Animations `animate__…`** : supprimées (charte).
@@ -78,7 +78,7 @@ Tout ce qui viendra de l'association a un emplacement unique, connu d'avance :
 | Logo, favicon, image de partage | `public/images/logo.svg` (ou `.png`), `favicon.png`, `og-default.jpg` | Logo de l'ancien site (`logo1.png`). |
 | Présentation (histoire, mission, équipe) | `src/content/pages/fr/association.md` | Texte provisoire. |
 | Partenaires | `src/content/partenaires/partenaires.yaml` | Logos de l'ancien site, noms vides. |
-| Traces GPS des sentiers | `src/data/geo/<slug>.json` | Centrage approximatif, `statut: provisoire`. |
+| Traces GPS des sentiers | `src/data/geo/sentiers/<slug>.json` | Centrage approximatif, `statut: provisoire`. |
 | Fiches espèces, sites, actions | `src/content/<collection>/fr/<slug>.md` | Contenu migré du dump SQL, champs douteux marqués. |
 | Destinataire du formulaire | variable `CONTACT_TO` dans Vercel | Adresse de test. |
 

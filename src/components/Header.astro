@@ -1,17 +1,22 @@
 ---
 import { languages, publishedLangs, type Lang } from '../i18n/ui';
-import { useTranslations, homeUrl, contactUrl } from '../i18n/utils';
+import { useTranslations, homeUrl, contactUrl, sectionUrl, pageUrl } from '../i18n/utils';
 import { association } from '../config/association';
 
 interface Props { lang: Lang; alternates?: Partial<Record<Lang, string>> }
 const { lang, alternates = {} } = Astro.props;
 const t = useTranslations(lang);
 
-// Rubriques ajoutées en phase 1 (Biodiversité, Sites & sentiers, Actions, Association).
-const nav: { href: string; label: string }[] = [
-  { href: contactUrl(lang), label: t('contact.title') },
+// `match` : préfixes d'URL qui rendent l'entrée active (« Sites & sentiers » couvre aussi les fiches sentier).
+const nav: { href: string; label: string; match: string[] }[] = [
+  { href: sectionUrl(lang, 'biodiversite'), label: t('nav.biodiversite'), match: [sectionUrl(lang, 'biodiversite')] },
+  { href: sectionUrl(lang, 'sites'), label: t('nav.sites'), match: [sectionUrl(lang, 'sites'), sectionUrl(lang, 'sentiers')] },
+  { href: sectionUrl(lang, 'actions'), label: t('nav.actions'), match: [sectionUrl(lang, 'actions')] },
+  { href: pageUrl(lang, 'association'), label: t('nav.association'), match: [pageUrl(lang, 'association')] },
+  { href: contactUrl(lang), label: t('contact.title'), match: [contactUrl(lang)] },
 ];
 const current = Astro.url.pathname;
+const isActive = (match: string[]) => match.some((m) => current === m || current.startsWith(`${m}/`));
 ---
 <header class="border-b border-bordure bg-fond">
   <div class="container-x flex items-center justify-between gap-6 py-4">
@@ -24,10 +29,10 @@ const current = Astro.url.pathname;
     </a>
 
     <div class="flex items-center gap-6">
-      <nav class="hidden md:block" aria-label="Navigation principale">
+      <nav class="hidden md:block" aria-label={t('nav.main')}>
         <ul class="flex items-center gap-6">
-          {nav.map(({ href, label }) => {
-            const active = current.startsWith(href);
+          {nav.map(({ href, label, match }) => {
+            const active = isActive(match);
             return (
               <li>
                 <a href={href}
@@ -60,7 +65,7 @@ const current = Astro.url.pathname;
       </button>
     </div>
   </div>
-  <nav id="menu-mobile" class="md:hidden hidden border-t border-bordure bg-fond-alt" aria-label="Navigation principale">
+  <nav id="menu-mobile" class="md:hidden hidden border-t border-bordure bg-fond-alt" aria-label={t('nav.main')}>
     <ul class="container-x py-2">
       {nav.map(({ href, label }) => (
         <li><a href={href} class="block py-3 font-medium">{label}</a></li>
