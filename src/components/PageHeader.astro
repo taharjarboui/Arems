@@ -1,0 +1,12 @@
+---
+/** En-tête de page : lien de retour, surtitre, titre, introduction. */
+interface Props { title: string; intro?: string; eyebrow?: string; backHref?: string; backLabel?: string }
+const { title, intro, eyebrow, backHref, backLabel } = Astro.props;
+---
+<header class="container-x pt-10 pb-8 md:pt-14">
+  {backHref && <a href={backHref} class="text-sm font-medium text-primaire hover:underline"><span aria-hidden="true" class="inline-block rtl:-scale-x-100">←</span> {backLabel}</a>}
+  {eyebrow && <p class="mt-4 text-sm font-semibold text-primaire">{eyebrow}</p>}
+  <h1 class:list={['max-w-4xl text-4xl leading-tight md:text-5xl', (backHref || eyebrow) && 'mt-2']}>{title}</h1>
+  <slot />
+  {intro && <p class="mt-4 max-w-3xl text-lg leading-relaxed text-encre/80">{intro}</p>}
+</header>

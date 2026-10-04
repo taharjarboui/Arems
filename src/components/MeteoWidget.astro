@@ -1,0 +1,72 @@
+---
+/**
+ * Météo actuelle d'un lieu, via l'API gratuite Open-Meteo (sans clé, appelée depuis le navigateur).
+ * Rien ne s'affiche tant que les données ne sont pas arrivées, ni si l'appel échoue.
+ * Réponse gardée 30 minutes dans sessionStorage pour ne pas rappeler l'API à chaque page.
+ */
+import type { Lang, UiKey } from '../i18n/ui';
+import { useTranslations } from '../i18n/utils';
+interface Props { lat: number; lng: number; lieu: string; lang: Lang }
+const { lat, lng, lieu, lang } = Astro.props;
+const t = useTranslations(lang);
+// Codes météo WMO regroupés en libellés simples (https://open-meteo.com/en/docs, « Weather variable documentation »).
+const codes = ['clair', 'nuageux', 'couvert', 'brouillard', 'bruine', 'pluie', 'averses', 'orage', 'neige'] as const;
+const labels = Object.fromEntries(codes.map((c) => [c, t(`meteo.${c}` as UiKey)]));
+---
+<aside class="meteo hidden rounded bg-encre p-5 text-white" data-lat={lat} data-lng={lng} data-labels={JSON.stringify(labels)} data-locale={lang === 'ar' ? 'ar-TN' : lang === 'en' ? 'en-GB' : 'fr-FR'} aria-live="polite">
+  <p class="text-sm text-white/75">{t('meteo.title')} · {lieu}</p>
+  <p class="mt-1 flex flex-wrap items-baseline gap-x-3">
+    <span class="meteo-temp whitespace-nowrap text-4xl font-bold tabular-nums"></span>
+    <span class="meteo-ciel font-medium"></span>
+  </p>
+  <p class="mt-2 text-sm tabular-nums">
+    {t('meteo.wind')} <span class="meteo-vent font-semibold"></span> · {t('meteo.humidity')} <span class="meteo-humidite font-semibold"></span>
+  </p>
+  <p class="mt-3 text-xs text-white/60"><a href="https://open-meteo.com/" class="underline" rel="noopener">{t('meteo.source')}</a></p>
+</aside>
+
+<script>
+  type Current = { temperature_2m: number; relative_humidity_2m: number; wind_speed_10m: number; weather_code: number };
+
+  function group(code: number) {
+    if (code === 0) return 'clair';
+    if (code <= 2) return 'nuageux';
+    if (code === 3) return 'couvert';
+    if (code === 45 || code === 48) return 'brouillard';
+    if (code >= 51 && code <= 57) return 'bruine';
+    if ((code >= 61 && code <= 67)) return 'pluie';
+    if ((code >= 71 && code <= 77) || code === 85 || code === 86) return 'neige';
+    if (code >= 80 && code <= 82) return 'averses';
+    return 'orage'; // 95 à 99
+  }
+
+  async function load(lat: string, lng: string): Promise<Current> {
+    const key = `meteo:${lat},${lng}`;
+    try {
+      const cached = JSON.parse(sessionStorage.getItem(key) ?? 'null');
+      if (cached && Date.now() - cached.at < 30 * 60 * 1000) return cached.current;
+    } catch { /* stockage indisponible : on rappelle l'API */ }
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}`
+      + '&current=temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code&wind_speed_unit=kmh&timezone=Africa%2FTunis';
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(String(response.status));
+    const { current } = await response.json();
+    try { sessionStorage.setItem(key, JSON.stringify({ at: Date.now(), current })); } catch { /* ignoré */ }
+    return current;
+  }
+
+  document.querySelectorAll<HTMLElement>('.meteo').forEach(async (el) => {
+    try {
+      const c = await load(el.dataset.lat!, el.dataset.lng!);
+      const labels = JSON.parse(el.dataset.labels!) as Record<string, string>;
+      const n = new Intl.NumberFormat(el.dataset.locale, { maximumFractionDigits: 0 });
+      el.querySelector('.meteo-temp')!.textContent = `${n.format(c.temperature_2m)} °C`;
+      el.querySelector('.meteo-ciel')!.textContent = labels[group(c.weather_code)];
+      el.querySelector('.meteo-vent')!.textContent = `${n.format(c.wind_speed_10m)} km/h`;
+      el.querySelector('.meteo-humidite')!.textContent = `${n.format(c.relative_humidity_2m)} %`;
+      el.classList.remove('hidden');
+    } catch {
+      // Pas de météo plutôt qu'une valeur fausse.
+    }
+  });
+</script>

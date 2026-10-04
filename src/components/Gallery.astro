@@ -1,0 +1,40 @@
+---
+/** Galerie de photos ; un clic ouvre la photo en grand dans un <dialog> natif (Échap ou bouton pour fermer). */
+interface Props { images: { src: string; alt: string; credit?: string }[]; openLabel: string; closeLabel: string }
+const { images, openLabel, closeLabel } = Astro.props;
+---
+{images.length > 0 && (
+  <div class="gallery">
+    <ul class="grid grid-cols-2 gap-3 md:grid-cols-3">
+      {images.map((img) => (
+        <li>
+          <button type="button" class="gallery-open block w-full overflow-hidden rounded border border-bordure" data-src={img.src} data-alt={img.alt} aria-label={`${openLabel} : ${img.alt}`}>
+            <img src={img.src} alt={img.alt} loading="lazy" width="600" height="400" class="aspect-[3/2] w-full object-cover transition-opacity hover:opacity-90" />
+          </button>
+        </li>
+      ))}
+    </ul>
+    <dialog class="gallery-dialog m-auto max-h-[92vh] max-w-[92vw] bg-transparent p-0 backdrop:bg-encre/85">
+      <form method="dialog" class="flex justify-end">
+        <button class="mb-2 rounded bg-fond px-3 py-1.5 text-sm font-semibold text-encre">{closeLabel}</button>
+      </form>
+      <img src="" alt="" class="gallery-full max-h-[80vh] w-auto rounded" />
+    </dialog>
+  </div>
+)}
+
+<script>
+  document.querySelectorAll<HTMLElement>('.gallery').forEach((gallery) => {
+    const dialog = gallery.querySelector<HTMLDialogElement>('.gallery-dialog')!;
+    const full = gallery.querySelector<HTMLImageElement>('.gallery-full')!;
+    gallery.querySelectorAll<HTMLButtonElement>('.gallery-open').forEach((button) => {
+      button.addEventListener('click', () => {
+        full.src = button.dataset.src!;
+        full.alt = button.dataset.alt!;
+        dialog.showModal();
+      });
+    });
+    // Un clic sur le fond ferme la photo.
+    dialog.addEventListener('click', (event) => { if (event.target === dialog) dialog.close(); });
+  });
+</script>

@@ -1,24 +1,129 @@
 ---
 import Base from '../../layouts/Base.astro';
-import type { Lang } from '../../i18n/ui';
-import { useTranslations, contactUrl, langPaths } from '../../i18n/utils';
-import { homeAlternates } from '../../lib/content';
-
-// Accueil provisoire (phase 0). Les sections (météo, biodiversité, actions, sentiers,
-// partenaires) arrivent en phase 3.
+import FicheCard from '../../components/FicheCard.astro';
+import MeteoWidget from '../../components/MeteoWidget.astro';
+import { categoriesEspeces } from '../../content.config';
+import type { Lang, UiKey } from '../../i18n/ui';
+import { useTranslations, contactUrl, langPaths, sectionUrl, splitId } from '../../i18n/utils';
+import { homeAlternates, entriesFor, geoFor, partenaires } from '../../lib/content';
 
 export function getStaticPaths() {
   return langPaths();
 }
 const lang = Astro.params.lang as Lang;
 const t = useTranslations(lang);
+const slugOf = (id: string) => splitId(id).slug;
+
+const especes = await entriesFor('especes', lang);
+// Une tuile par groupe d'espèces, illustrée par la première espèce du groupe qui a une photo.
+const groupes = categoriesEspeces
+  .map((c) => {
+    const items = especes.filter((e) => e.data.categorie === c);
+    return { categorie: c, count: items.length, image: items.find((e) => e.data.image)?.data.image };
+  })
+  .filter((g) => g.count > 0);
+const sites = await entriesFor('sites', lang);
+const sitePrincipal = sites[0];
+const geoSite = sitePrincipal ? await geoFor('sites', slugOf(sitePrincipal.id)) : undefined;
+const sentiers = await entriesFor('sentiers', lang);
+const actions = (await entriesFor('actions', lang)).slice(0, 4);
+const logos = await partenaires();
+const hero = especes.find((e) => slugOf(e.id) === 'flamant-rose')?.data;
 ---
 <Base lang={lang} title={t('site.name')} description={t('hero.text')} alternates={homeAlternates()}>
-  <section class="container-x pt-16 pb-24 md:pt-24">
-    <h1 class="max-w-3xl text-5xl leading-[1.02] md:text-7xl">{t('hero.title')}</h1>
-    <p class="mt-6 max-w-2xl text-xl leading-relaxed text-encre/80">{t('hero.text')}</p>
-    <div class="mt-8">
+
+  <!-- Accroche : photo de la sebkha, message, météo du site -->
+  <section class="relative isolate overflow-hidden bg-encre text-white">
+    {hero?.image && <img src={hero.image} alt={hero.imageAlt ?? ''} width="1600" height="1066" fetchpriority="high" class="absolute inset-0 -z-10 h-full w-full object-cover opacity-55" />}
+    <div class="container-x grid items-end gap-8 py-16 md:grid-cols-[minmax(0,1fr)_300px] md:py-24">
+      <div>
+        <h1 class="max-w-3xl text-4xl leading-tight md:text-6xl">{t('hero.title')}</h1>
+        <p class="mt-5 max-w-2xl text-lg leading-relaxed text-white/90 md:text-xl">{t('hero.text')}</p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href={sectionUrl(lang, 'biodiversite')} class="btn-primary">{t('home.biodiversite.all')}</a>
+          <a href={sectionUrl(lang, 'sites')} class="inline-flex items-center rounded border-2 border-white px-5 py-3 font-semibold hover:bg-white hover:text-encre">{t('nav.sites')}</a>
+        </div>
+      </div>
+      {geoSite && sitePrincipal && <MeteoWidget lat={geoSite.centre[0]} lng={geoSite.centre[1]} lieu={sitePrincipal.data.title} lang={lang} />}
+    </div>
+  </section>
+
+  <!-- Biodiversité : un accès par groupe -->
+  <section class="container-x py-16" aria-labelledby="h-biodiversite">
+    <div class="flex flex-wrap items-end justify-between gap-4">
+      <div class="max-w-2xl">
+        <h2 id="h-biodiversite" class="text-3xl">{t('home.biodiversite')}</h2>
+        <p class="mt-2 text-lg text-encre/80">{t('home.biodiversite.text')}</p>
+      </div>
+      <a href={sectionUrl(lang, 'biodiversite')} class="font-semibold text-primaire hover:underline">{t('home.biodiversite.all')}</a>
+    </div>
+    <ul class="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
+      {groupes.map((g) => (
+        <li>
+          <a href={`${sectionUrl(lang, 'biodiversite')}#${g.categorie}`} class="group relative block aspect-[4/3] overflow-hidden rounded bg-primaire">
+            {g.image && <img src={g.image} alt="" loading="lazy" width="600" height="450" class="h-full w-full object-cover opacity-80 transition-opacity group-hover:opacity-100" />}
+            <span class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-encre/90 to-transparent p-4 text-white">
+              <span class="block text-xl font-bold">{t(`cat.${g.categorie}` as UiKey)}</span>
+              <span class="text-sm text-white/85">{g.count}</span>
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <!-- Sites et sentiers -->
+  {sentiers.length > 0 && (
+    <section class="bg-fond-alt py-16" aria-labelledby="h-sites">
+      <div class="container-x">
+        <div class="flex flex-wrap items-end justify-between gap-4">
+          <div class="max-w-2xl">
+            <h2 id="h-sites" class="text-3xl">{t('home.sites')}</h2>
+            {sitePrincipal && <p class="mt-2 text-lg text-encre/80">{sitePrincipal.data.summary}</p>}
+          </div>
+          <a href={sectionUrl(lang, 'sites')} class="font-semibold text-primaire hover:underline">{t('home.sites.all')}</a>
+        </div>
+        <div class="mt-8 grid gap-6 md:grid-cols-2">
+          {sentiers.map((s) => <FicheCard href={sectionUrl(lang, 'sentiers', slugOf(s.id))} title={s.data.title} summary={s.data.summary} image={s.data.image} imageAlt={s.data.imageAlt} meta={s.data.distance} />)}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Actions -->
+  {actions.length > 0 && (
+    <section class="container-x py-16" aria-labelledby="h-actions">
+      <div class="flex flex-wrap items-end justify-between gap-4">
+        <h2 id="h-actions" class="text-3xl">{t('home.actions')}</h2>
+        <a href={sectionUrl(lang, 'actions')} class="font-semibold text-primaire hover:underline">{t('home.actions.all')}</a>
+      </div>
+      <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {actions.map((a) => <FicheCard href={sectionUrl(lang, 'actions', slugOf(a.id))} title={a.data.title} summary={a.data.summary} image={a.data.image} imageAlt={a.data.imageAlt} />)}
+      </div>
+    </section>
+  )}
+
+  <!-- Participer -->
+  <section class="bg-primaire py-14 text-white">
+    <div class="container-x flex flex-wrap items-center justify-between gap-6">
+      <div class="max-w-2xl">
+        <h2 class="text-3xl">{t('home.rejoindre.title')}</h2>
+        <p class="mt-2 text-lg text-white/90">{t('home.rejoindre.text')}</p>
+      </div>
       <a href={contactUrl(lang)} class="btn-primary">{t('hero.cta')}</a>
     </div>
   </section>
+
+  <!-- Partenaires -->
+  {logos.length > 0 && (
+    <section class="container-x py-14" aria-labelledby="h-partenaires">
+      <h2 id="h-partenaires" class="text-2xl">{t('home.partenaires')}</h2>
+      <ul class="mt-8 grid grid-cols-3 items-center gap-6 sm:grid-cols-5 lg:grid-cols-8">
+        {logos.map((p) => {
+          const logo = <img src={p.data.logo} alt={p.data.aCompleter ? '' : p.data.nom} title={p.data.aCompleter ? undefined : p.data.nom} loading="lazy" width="160" height="100" class="mx-auto max-h-16 w-auto object-contain" />;
+          return <li>{p.data.url ? <a href={p.data.url} rel="noopener">{logo}</a> : logo}</li>;
+        })}
+      </ul>
+    </section>
+  )}
 </Base>

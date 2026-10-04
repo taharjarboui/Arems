@@ -81,9 +81,12 @@
 
 /* Carte Leaflet */
 .leaflet-container { font-family: inherit; }
-.marker-pin {
-  width: 16px; height: 16px; border-radius: 50%;
-  background: var(--color-primaire);
-  border: 3px solid var(--color-fond);
+.geo-pin {
+  display: grid; place-items: center;
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--color-primaire); color: #fff;
+  font: 700 13px/1 var(--font-sans);
+  border: 2px solid var(--color-fond);
   box-shadow: 0 0 0 1px var(--color-encre);
 }
+.geo-pin-dot { width: 18px; height: 18px; }

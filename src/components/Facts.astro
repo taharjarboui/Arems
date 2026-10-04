@@ -1,0 +1,15 @@
+---
+/** Liste de caractéristiques (libellé / valeur) dans un encadré bleuté. Les valeurs vides sont ignorées. */
+interface Props { items: { label: string; value?: string; italic?: boolean }[] }
+const items = Astro.props.items.filter((i) => i.value);
+---
+{items.length > 0 && (
+  <dl class="divide-y divide-bordure rounded border-s-4 border-secondaire bg-fond-alt px-5 py-2">
+    {items.map((i) => (
+      <div class="py-2.5">
+        <dt class="text-sm text-encre/70">{i.label}</dt>
+        <dd class:list={['font-medium', i.italic && 'italic']}>{i.value}</dd>
+      </div>
+    ))}
+  </dl>
+)}

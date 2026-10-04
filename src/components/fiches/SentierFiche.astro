@@ -1,0 +1,80 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import PageHeader from '../PageHeader.astro';
+import Facts from '../Facts.astro';
+import GeoMap, { type GeoMarker } from '../GeoMap.astro';
+import type { Lang, UiKey } from '../../i18n/ui';
+import { useTranslations, sectionUrl, splitId } from '../../i18n/utils';
+import { bySlug, geoFor } from '../../lib/content';
+
+interface Props { entry: CollectionEntry<'sentiers'>; lang: Lang }
+const { entry, lang } = Astro.props;
+const t = useTranslations(lang);
+const d = entry.data;
+const slug = splitId(entry.id).slug;
+const { Content } = await render(entry);
+const site = (await bySlug('sites', lang)).get(d.site);
+const geo = await geoFor('sentiers', slug);
+
+// Un marqueur par point dont la position est connue ; `n` renvoie au point du même rang dans le Markdown.
+const markers: GeoMarker[] = (geo?.points ?? [])
+  .filter((p) => d.points[p.n - 1])
+  .map((p) => ({ n: p.n, lat: p.position[0], lng: p.position[1], title: d.points[p.n - 1].titre, href: `#point-${p.n}` }));
+---
+<PageHeader title={d.title} intro={d.summary} backHref={sectionUrl(lang, 'sites')} backLabel={t('section.sites.title')} />
+
+<div class="container-x grid gap-10 pb-12 md:grid-cols-[minmax(0,1fr)_320px]">
+  <div class="min-w-0 space-y-10">
+    {geo && (
+      <section aria-labelledby="carte">
+        <h2 id="carte" class="mb-4 text-2xl">{t('sentier.carte')}</h2>
+        <GeoMap
+          centre={geo.centre}
+          zoom={geo.zoom}
+          trace={geo.trace}
+          markers={markers}
+          provisoire={geo.statut === 'provisoire'}
+          provisoireLabel={t('sentier.provisoire')}
+          label={`${t('sentier.carte')} : ${d.title}`}
+          locate={{ label: t('sentier.localiser'), error: t('sentier.localiser.erreur'), here: t('sentier.vous') }}
+        />
+      </section>
+    )}
+
+    {d.points.length > 0 && (
+      <section aria-labelledby="points">
+        <h2 id="points" class="text-2xl">{t('sentier.points')}</h2>
+        <ol class="mt-6 space-y-8">
+          {d.points.map((p, i) => (
+            <li id={`point-${i + 1}`} class="grid scroll-mt-6 gap-4 sm:grid-cols-[3rem_minmax(0,1fr)]">
+              <span class="grid h-10 w-10 place-items-center rounded-full bg-primaire font-bold text-white" aria-hidden="true">{i + 1}</span>
+              <div class="min-w-0">
+                <h3 class="text-xl">{p.titre}</h3>
+                <p class="mt-2 max-w-prose leading-relaxed text-encre/85">{p.description}</p>
+                {p.image && <img src={p.image} alt={p.imageAlt ?? p.titre} loading="lazy" width="1200" height="800" class="mt-4 max-h-96 w-auto max-w-full rounded border border-bordure" />}
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
+    )}
+
+    <div class="prose-arems max-w-prose"><Content /></div>
+  </div>
+
+  <aside class="space-y-6">
+    <Facts items={[
+      { label: t('sentier.site'), value: site?.data.title },
+      { label: t('sentier.distance'), value: d.distance },
+      { label: t('sentier.duree'), value: d.duree },
+      { label: t('sentier.difficulte'), value: d.difficulte && t(`diff.${d.difficulte}` as UiKey) },
+      { label: t('sentier.points'), value: d.points.length ? String(d.points.length) : undefined },
+    ]} />
+    {d.image && (
+      <figure class="m-0">
+        <a href={d.image}><img src={d.image} alt={d.imageAlt ?? t('sentier.plan')} loading="lazy" width="800" height="600" class="w-full rounded border border-bordure" /></a>
+        <figcaption class="mt-2 text-sm text-encre/70">{t('sentier.plan')}</figcaption>
+      </figure>
+    )}
+  </aside>
+</div>

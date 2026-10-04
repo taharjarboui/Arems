@@ -10,6 +10,16 @@ export async function entriesFor<C extends FicheCollection>(collection: C, lang:
   return all.sort((a, b) => (a.data.order - b.data.order) || a.data.title.localeCompare(b.data.title, lang));
 }
 
+/** Entrées d'une collection pour une langue, indexées par slug (pour les liens entre fiches). */
+export async function bySlug<C extends FicheCollection>(collection: C, lang: Lang) {
+  return new Map((await entriesFor(collection, lang)).map((e) => [splitId(e.id).slug, e]));
+}
+
+/** Partenaires dans l'ordre d'affichage. */
+export async function partenaires() {
+  return (await getCollection('partenaires')).sort((a, b) => a.data.order - b.data.order);
+}
+
 /** Coordonnées d'un sentier ou d'un site (src/data/geo/<type>/<slug>.json), ou undefined. */
 export async function geoFor(type: 'sentiers' | 'sites', slug: string) {
   const all = await getCollection('geo', (e) => e.id === `${type}/${slug}`);

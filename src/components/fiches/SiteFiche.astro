@@ -1,0 +1,79 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import PageHeader from '../PageHeader.astro';
+import Facts from '../Facts.astro';
+import FicheCard from '../FicheCard.astro';
+import GeoMap from '../GeoMap.astro';
+import MeteoWidget from '../MeteoWidget.astro';
+import type { Lang } from '../../i18n/ui';
+import { useTranslations, sectionUrl, splitId } from '../../i18n/utils';
+import { entriesFor, geoFor } from '../../lib/content';
+
+interface Props { entry: CollectionEntry<'sites'>; lang: Lang }
+const { entry, lang } = Astro.props;
+const t = useTranslations(lang);
+const d = entry.data;
+const slug = splitId(entry.id).slug;
+const { Content } = await render(entry);
+const geo = await geoFor('sites', slug);
+const sentiers = (await entriesFor('sentiers', lang)).filter((s) => s.data.site === slug);
+const especes = (await entriesFor('especes', lang)).filter((e) => e.data.sites.includes(slug));
+const actions = (await entriesFor('actions', lang)).filter((a) => a.data.site === slug);
+---
+<PageHeader title={d.title} intro={d.summary} eyebrow={d.protection} backHref={sectionUrl(lang, 'sites')} backLabel={t('section.sites.title')} />
+
+{d.image && (
+  <figure class="container-x m-0 mb-10">
+    <img src={d.image} alt={d.imageAlt ?? d.title} width="1600" height="600" class="aspect-[16/6] w-full rounded object-cover" />
+    {d.imageCredit && <figcaption class="mt-2 text-xs text-encre/60">{t('espece.photo')} : {d.imageCredit}</figcaption>}
+  </figure>
+)}
+
+<div class="container-x grid gap-10 pb-12 md:grid-cols-[minmax(0,1fr)_320px]">
+  <div class="min-w-0 space-y-10">
+    <div class="prose-arems max-w-prose"><Content /></div>
+    {geo && (
+      <section aria-labelledby="situation">
+        <h2 id="situation" class="mb-4 text-2xl">{t('site.carte')}</h2>
+        <GeoMap centre={geo.centre} zoom={geo.zoom} trace={geo.trace} markers={[{ lat: geo.centre[0], lng: geo.centre[1], title: d.title }]} label={`${t('site.carte')} : ${d.title}`} class="h-[360px]" />
+      </section>
+    )}
+  </div>
+  <aside class="space-y-6">
+    <Facts items={[
+      { label: t('site.protection'), value: d.protection },
+      { label: t('site.surface'), value: d.surface },
+      { label: t('site.commune'), value: d.commune },
+    ]} />
+    {geo && <MeteoWidget lat={geo.centre[0]} lng={geo.centre[1]} lieu={d.title} lang={lang} />}
+  </aside>
+</div>
+
+{sentiers.length > 0 && (
+  <section class="bg-fond-alt py-12" aria-labelledby="sentiers">
+    <div class="container-x">
+      <h2 id="sentiers" class="text-2xl">{t('site.sentiers')}</h2>
+      <div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {sentiers.map((s) => <FicheCard href={sectionUrl(lang, 'sentiers', splitId(s.id).slug)} title={s.data.title} summary={s.data.summary} image={s.data.image} imageAlt={s.data.imageAlt} meta={s.data.distance} />)}
+      </div>
+    </div>
+  </section>
+)}
+
+{especes.length > 0 && (
+  <section class="container-x py-12" aria-labelledby="especes">
+    <h2 id="especes" class="text-2xl">{t('site.especes')}</h2>
+    <div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      {especes.map((e) => <FicheCard href={sectionUrl(lang, 'biodiversite', splitId(e.id).slug)} title={e.data.title} sci={e.data.nomScientifique} image={e.data.image} imageAlt={e.data.imageAlt} noImageLabel={t('espece.sansPhoto')} />)}
+    </div>
+  </section>
+)}
+
+{actions.length > 0 && (
+  <section class="container-x py-12" aria-labelledby="actions">
+    <h2 id="actions" class="text-2xl">{t('site.actions')}</h2>
+    <div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      {actions.map((a) => <FicheCard href={sectionUrl(lang, 'actions', splitId(a.id).slug)} title={a.data.title} summary={a.data.summary} image={a.data.image} imageAlt={a.data.imageAlt} />)}
+    </div>
+  </section>
+)}

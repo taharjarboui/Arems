@@ -1,10 +1,14 @@
 ---
 import Base from '../../../layouts/Base.astro';
-import { publishedLangs, sections, type Lang, type SectionKey } from '../../../i18n/ui';
+import PageHeader from '../../../components/PageHeader.astro';
+import FicheCard from '../../../components/FicheCard.astro';
+import UicnBadge from '../../../components/UicnBadge.astro';
+import { categoriesEspeces } from '../../../content.config';
+import { publishedLangs, sections, type Lang, type SectionKey, type UiKey } from '../../../i18n/ui';
 import { useTranslations, sectionUrl, splitId } from '../../../i18n/utils';
 import { entriesFor, sectionAlternates } from '../../../lib/content';
 
-// Liste provisoire d'une rubrique (phase 1). Chaque rubrique reçoit sa propre mise en page en phase 3.
+// Page de liste de chaque rubrique : /fr/biodiversite, /fr/sites, /fr/sentiers, /fr/actions.
 
 export function getStaticPaths() {
   return publishedLangs.flatMap((lang) =>
@@ -15,27 +19,89 @@ export function getStaticPaths() {
 const lang = Astro.params.lang as Lang;
 const { key } = Astro.props as { key: SectionKey };
 const t = useTranslations(lang);
-const entries = await entriesFor(sections[key].collection, lang);
 const title = t(`section.${key}.title`);
 const intro = t(`section.${key}.intro`);
+const slugOf = (id: string) => splitId(id).slug;
+
+const especes = key === 'biodiversite' ? await entriesFor('especes', lang) : [];
+const groupes = categoriesEspeces
+  .map((c) => ({ categorie: c, items: especes.filter((e) => e.data.categorie === c) }))
+  .filter((g) => g.items.length > 0);
+const sites = key === 'sites' ? await entriesFor('sites', lang) : [];
+const sentiers = key === 'sites' || key === 'sentiers' ? await entriesFor('sentiers', lang) : [];
+const actions = key === 'actions' ? await entriesFor('actions', lang) : [];
+const empty = !especes.length && !sites.length && !sentiers.length && !actions.length;
 ---
 <Base lang={lang} title={title} description={intro} alternates={sectionAlternates(key)}>
-  <section class="container-x pt-12 pb-8 md:pt-16">
-    <h1 class="text-4xl md:text-5xl">{title}</h1>
-    <p class="mt-4 max-w-2xl text-lg leading-relaxed text-encre/75">{intro}</p>
-  </section>
-  <section class="container-x pb-16">
-    {entries.length === 0 ? (
-      <p class="text-encre/60">{t('empty')}</p>
-    ) : (
-      <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {entries.map((e) => (
-          <li>
-            <a href={sectionUrl(lang, key, splitId(e.id).slug)} class="font-semibold text-primaire hover:underline">{e.data.title}</a>
-            <p class="mt-1 text-encre/75">{e.data.summary}</p>
-          </li>
-        ))}
-      </ul>
-    )}
-  </section>
+  <PageHeader title={title} intro={intro} />
+
+  {empty && <p class="container-x pb-16 text-encre/60">{t('empty')}</p>}
+
+  {groupes.length > 0 && (
+    <>
+      <nav class="container-x pb-8" aria-label={t('biodiversite.groupes')}>
+        <ul class="flex flex-wrap gap-2">
+          {groupes.map((g) => (
+            <li><a href={`#${g.categorie}`} class="inline-block rounded border border-bordure px-3 py-1.5 font-medium hover:border-primaire hover:text-primaire">{t(`cat.${g.categorie}` as UiKey)} <span class="text-encre/60">({g.items.length})</span></a></li>
+          ))}
+        </ul>
+      </nav>
+      {groupes.map((g, i) => (
+        <section id={g.categorie} class:list={['scroll-mt-4 py-10', i % 2 === 0 ? 'bg-fond-alt' : 'bg-fond']} aria-labelledby={`titre-${g.categorie}`}>
+          <div class="container-x">
+            <h2 id={`titre-${g.categorie}`} class="text-2xl">{t(`cat.${g.categorie}` as UiKey)}</h2>
+            <div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {g.items.map((e) => (
+                <FicheCard href={sectionUrl(lang, 'biodiversite', slugOf(e.id))} title={e.data.title} sci={e.data.nomScientifique} image={e.data.image} imageAlt={e.data.imageAlt} noImageLabel={t('espece.sansPhoto')}>
+                  {e.data.statutUicn && <div class="mt-2"><UicnBadge statut={e.data.statutUicn} lang={lang} /></div>}
+                </FicheCard>
+              ))}
+            </div>
+          </div>
+        </section>
+      ))}
+    </>
+  )}
+
+  {sites.map((site) => {
+    const siteSlug = slugOf(site.id);
+    const siens = sentiers.filter((s) => s.data.site === siteSlug);
+    return (
+      <section class="container-x pb-14">
+        <article class="grid gap-6 overflow-hidden rounded border border-bordure md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+          {site.data.image && <img src={site.data.image} alt={site.data.imageAlt ?? ''} width="1200" height="800" class="h-full w-full object-cover" />}
+          <div class="p-6">
+            {site.data.protection && <p class="text-sm font-semibold text-primaire">{site.data.protection}</p>}
+            <h2 class="mt-1 text-2xl"><a href={sectionUrl(lang, 'sites', siteSlug)} class="hover:underline">{site.data.title}</a></h2>
+            <p class="mt-3 text-encre/80">{site.data.summary}</p>
+            <a href={sectionUrl(lang, 'sites', siteSlug)} class="btn-secondary mt-5">{t('fiche.enSavoirPlus')}</a>
+          </div>
+        </article>
+        {siens.length > 0 && (
+          <>
+            <h3 class="mt-10 text-xl">{t('site.sentiers')}</h3>
+            <div class="mt-4 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {siens.map((s) => <FicheCard href={sectionUrl(lang, 'sentiers', slugOf(s.id))} title={s.data.title} summary={s.data.summary} image={s.data.image} imageAlt={s.data.imageAlt} meta={s.data.distance} />)}
+            </div>
+          </>
+        )}
+      </section>
+    );
+  })}
+
+  {key === 'sentiers' && sentiers.length > 0 && (
+    <section class="container-x pb-16">
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {sentiers.map((s) => <FicheCard href={sectionUrl(lang, 'sentiers', slugOf(s.id))} title={s.data.title} summary={s.data.summary} image={s.data.image} imageAlt={s.data.imageAlt} meta={s.data.distance} />)}
+      </div>
+    </section>
+  )}
+
+  {actions.length > 0 && (
+    <section class="container-x pb-16">
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {actions.map((a) => <FicheCard href={sectionUrl(lang, 'actions', slugOf(a.id))} title={a.data.title} summary={a.data.summary} image={a.data.image} imageAlt={a.data.imageAlt} />)}
+      </div>
+    </section>
+  )}
 </Base>

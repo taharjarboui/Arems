@@ -1,0 +1,35 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import EspeceFiche from '../../../components/fiches/EspeceFiche.astro';
+import SiteFiche from '../../../components/fiches/SiteFiche.astro';
+import SentierFiche from '../../../components/fiches/SentierFiche.astro';
+import ActionFiche from '../../../components/fiches/ActionFiche.astro';
+import { publishedLangs, sections, type Lang, type SectionKey } from '../../../i18n/ui';
+import { splitId } from '../../../i18n/utils';
+import { ficheAlternates } from '../../../lib/content';
+
+// Une page par fiche : /fr/biodiversite/flamant-rose, /fr/sentiers/circuit-oued-soud…
+// Seules les fiches des langues publiées sont générées.
+
+export async function getStaticPaths() {
+  const paths = [];
+  for (const key of Object.keys(sections) as SectionKey[]) {
+    for (const entry of await getCollection(sections[key].collection)) {
+      const { lang, slug } = splitId(entry.id);
+      if (publishedLangs.includes(lang)) paths.push({ params: { lang, section: sections[key].path[lang], slug }, props: { key, entry } });
+    }
+  }
+  return paths;
+}
+
+const lang = Astro.params.lang as Lang;
+const { key, entry } = Astro.props as { key: SectionKey; entry: any };
+const alternates = await ficheAlternates(key, splitId(entry.id).slug);
+---
+<Base lang={lang} title={entry.data.title} description={entry.data.summary} image={entry.data.image} alternates={alternates}>
+  {key === 'biodiversite' && <EspeceFiche entry={entry} lang={lang} />}
+  {key === 'sites' && <SiteFiche entry={entry} lang={lang} />}
+  {key === 'sentiers' && <SentierFiche entry={entry} lang={lang} />}
+  {key === 'actions' && <ActionFiche entry={entry} lang={lang} />}
+</Base>

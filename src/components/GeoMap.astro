@@ -1,0 +1,99 @@
+---
+/**
+ * Carte Leaflet + OpenStreetMap pour un sentier ou un site.
+ * Les coordonnées viennent de src/data/geo/ ; aucune n'est inventée :
+ * sans tracé ni point, la carte est simplement centrée sur le lieu.
+ * Leaflet n'est chargé que sur les pages qui affichent une carte.
+ */
+export interface GeoMarker { lat: number; lng: number; title: string; n?: number; href?: string }
+interface Props {
+  centre: [number, number];
+  zoom: number;
+  trace?: [number, number][];
+  markers?: GeoMarker[];
+  /** Affiche la mention « tracé indicatif » sous la carte. */
+  provisoire?: boolean;
+  label: string;
+  provisoireLabel?: string;
+  locate?: { label: string; error: string; here: string };
+  class?: string;
+}
+const { centre, zoom, trace = [], markers = [], provisoire = false, label, provisoireLabel, locate, class: cls = 'h-[420px]' } = Astro.props;
+---
+<figure class="geo-map-wrap m-0">
+  <div class:list={['geo-map w-full overflow-hidden rounded border border-bordure bg-fond-alt', cls]}
+       data-centre={JSON.stringify(centre)}
+       data-zoom={zoom}
+       data-trace={JSON.stringify(trace)}
+       data-markers={JSON.stringify(markers)}
+       data-here={locate?.here}
+       role="region" aria-label={label}></div>
+  {(provisoire || locate) && (
+    <figcaption class="mt-3 flex flex-wrap items-center justify-between gap-3 text-sm">
+      {provisoire ? <p class="text-encre/75">{provisoireLabel}</p> : <span></span>}
+      {locate && (
+        <span class="flex items-center gap-3">
+          <span class="geo-locate-error hidden text-encre/75" role="status">{locate.error}</span>
+          <button type="button" class="geo-locate btn-secondary py-2 text-sm">{locate.label}</button>
+        </span>
+      )}
+    </figcaption>
+  )}
+</figure>
+
+<script>
+  import L from 'leaflet';
+  import 'leaflet/dist/leaflet.css';
+
+  type Marker = { lat: number; lng: number; title: string; n?: number; href?: string };
+
+  const css = (name: string) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  const escape = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!);
+
+  document.querySelectorAll<HTMLElement>('.geo-map').forEach((el) => {
+    const centre = JSON.parse(el.dataset.centre!) as [number, number];
+    const trace = JSON.parse(el.dataset.trace ?? '[]') as [number, number][];
+    const markers = JSON.parse(el.dataset.markers ?? '[]') as Marker[];
+
+    const map = L.map(el, { scrollWheelZoom: false }).setView(centre, Number(el.dataset.zoom ?? 14));
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    }).addTo(map);
+
+    const group = L.featureGroup().addTo(map);
+    if (trace.length > 1) L.polyline(trace, { color: css('--color-primaire'), weight: 4 }).addTo(group);
+    for (const m of markers) {
+      const icon = m.n
+        ? L.divIcon({ className: '', html: `<span class="geo-pin">${m.n}</span>`, iconSize: [28, 28], iconAnchor: [14, 14] })
+        : L.divIcon({ className: '', html: '<span class="geo-pin geo-pin-dot"></span>', iconSize: [18, 18], iconAnchor: [9, 9] });
+      const title = escape(m.title);
+      L.marker([m.lat, m.lng], { icon, title: m.title })
+        .bindPopup(m.href ? `<a href="${m.href}">${title}</a>` : title)
+        .addTo(group);
+    }
+    if (group.getLayers().length > 1) map.fitBounds(group.getBounds().pad(0.25));
+
+    // Bouton « Me localiser » : utile sur le terrain, pendant la visite.
+    const figure = el.closest('.geo-map-wrap');
+    const button = figure?.querySelector<HTMLButtonElement>('.geo-locate');
+    const error = figure?.querySelector<HTMLElement>('.geo-locate-error');
+    let me: L.CircleMarker | undefined;
+    button?.addEventListener('click', () => {
+      error?.classList.add('hidden');
+      if (!('geolocation' in navigator)) { error?.classList.remove('hidden'); return; }
+      navigator.geolocation.getCurrentPosition(
+        ({ coords }) => {
+          const here: [number, number] = [coords.latitude, coords.longitude];
+          me?.remove();
+          me = L.circleMarker(here, { radius: 8, color: css('--color-encre'), fillColor: css('--color-accent'), fillOpacity: 1, weight: 2 })
+            .bindPopup(el.dataset.here ?? '')
+            .addTo(map);
+          map.setView(here, Math.max(map.getZoom(), 15));
+        },
+        () => error?.classList.remove('hidden'),
+        { enableHighAccuracy: true, timeout: 10000 },
+      );
+    });
+  });
+</script>

@@ -1,0 +1,67 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import PageHeader from '../PageHeader.astro';
+import Facts from '../Facts.astro';
+import UicnBadge from '../UicnBadge.astro';
+import type { Lang, UiKey } from '../../i18n/ui';
+import { useTranslations, sectionUrl, splitId } from '../../i18n/utils';
+import { bySlug } from '../../lib/content';
+
+interface Props { entry: CollectionEntry<'especes'>; lang: Lang }
+const { entry, lang } = Astro.props;
+const t = useTranslations(lang);
+const d = entry.data;
+const { Content } = await render(entry);
+const sites = await bySlug('sites', lang);
+const lieux = d.sites.map((s) => sites.get(s)).filter((s) => s !== undefined);
+---
+<PageHeader title={d.title} eyebrow={t(`cat.${d.categorie}` as UiKey)} backHref={`${sectionUrl(lang, 'biodiversite')}#${d.categorie}`} backLabel={t('section.biodiversite.title')}>
+  <p class="mt-2 text-xl italic text-encre/75">{d.nomScientifique}</p>
+</PageHeader>
+
+<div class="container-x grid gap-10 pb-12 md:grid-cols-[minmax(0,1fr)_320px]">
+  <div class="min-w-0 space-y-6">
+    <figure class="mx-0 mt-0">
+      {d.image
+        ? <img src={d.image} alt={d.imageAlt ?? d.title} width="1600" height="1067" class="w-full rounded object-cover" />
+        : <div class="flex aspect-[3/2] items-center justify-center rounded bg-fond-alt text-encre/50">{t('espece.sansPhoto')}</div>}
+      {d.imageCredit && <figcaption class="mt-2 text-xs text-encre/60">{t('espece.photo')} : {d.imageCredit}</figcaption>}
+    </figure>
+
+    <p class="max-w-prose text-lg leading-relaxed">{d.summary}</p>
+
+    {d.son && (
+      <div class="max-w-prose rounded bg-primaire-clair p-4">
+        <p class="mb-2 font-semibold">{t('espece.ecouter')}</p>
+        <audio controls preload="none" src={d.son} class="w-full"></audio>
+        {d.sonCredit && <p class="mt-2 text-xs text-encre/60">{t('espece.enregistrement')} : {d.sonCredit}</p>}
+      </div>
+    )}
+
+    <div class="prose-arems max-w-prose"><Content /></div>
+  </div>
+
+  <aside class="space-y-6">
+    {d.statutUicn && (
+      <div class="rounded border border-bordure p-4">
+        <p class="text-sm text-encre/70">{t('espece.statut')} · {t(d.statutPortee === 'national' ? 'espece.statut.national' : 'espece.statut.mondial')}</p>
+        <div class="mt-2"><UicnBadge statut={d.statutUicn} lang={lang} /></div>
+      </div>
+    )}
+    <Facts items={[
+      { label: t('espece.groupe'), value: t(`cat.${d.categorie}` as UiKey) },
+      { label: t('espece.famille'), value: d.famille },
+      { label: t('espece.ordre'), value: d.ordre },
+      { label: t('espece.habitat'), value: d.habitat },
+      { label: t('espece.importance'), value: d.importanceEcologique },
+    ]} />
+    {lieux.length > 0 && (
+      <div>
+        <h2 class="text-lg">{t('espece.sites')}</h2>
+        <ul class="mt-2 space-y-1">
+          {lieux.map((s) => <li><a href={sectionUrl(lang, 'sites', splitId(s.id).slug)} class="text-primaire hover:underline">{s.data.title}</a></li>)}
+        </ul>
+      </div>
+    )}
+  </aside>
+</div>

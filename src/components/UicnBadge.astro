@@ -1,0 +1,17 @@
+---
+/** Badge de catégorie de la Liste rouge UICN, aux couleurs officielles. */
+import type { Lang, UiKey } from '../i18n/ui';
+import { useTranslations } from '../i18n/utils';
+interface Props { statut: string; lang: Lang; compact?: boolean }
+const { statut, lang, compact = false } = Astro.props;
+const t = useTranslations(lang);
+const colors: Record<string, string> = {
+  LC: 'bg-uicn-lc text-encre', NT: 'bg-uicn-nt text-encre', VU: 'bg-uicn-vu text-encre', EN: 'bg-uicn-en text-encre',
+  CR: 'bg-uicn-cr text-white', EW: 'bg-uicn-ew text-white', EX: 'bg-uicn-ex text-white', DD: 'bg-uicn-dd text-encre', NE: 'bg-uicn-ne text-encre border border-bordure',
+};
+const label = t(`uicn.${statut}` as UiKey);
+---
+<span class="inline-flex items-center gap-2 text-sm font-semibold" title={compact ? label : undefined}>
+  <abbr class:list={['inline-grid h-6 min-w-8 place-items-center rounded-sm px-1.5 text-xs font-bold no-underline', colors[statut]]} title={label}>{statut}</abbr>
+  {!compact && <span>{label}</span>}
+</span>
