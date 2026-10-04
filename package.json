@@ -5,7 +5,8 @@
   "private": true,
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && node scripts/protection/install.mjs",
+    "test:protection": "node scripts/protection/test.mjs",
     "preview": "astro preview",
     "check": "astro check",
     "todo": "node scripts/todo.mjs",

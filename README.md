@@ -23,13 +23,26 @@ npm run preview    # teste le build
 | `src/config/association.ts` | Nom, contacts et réseaux sociaux de l'association. |
 | `src/i18n/ui.ts` | Textes de l'interface, segments d'URL par langue, langues publiées (`publishedLangs`). |
 | `src/pages/[lang]/` | Les gabarits. |
-| `src/components/` | Header, Footer, Card, Map (Leaflet), SectionHeading. |
+| `src/components/` | Header, Footer, `GeoMap` (Leaflet), `MeteoWidget` (Open-Meteo), `FicheCard`, `UicnBadge`, `Gallery`, fiches par rubrique (`fiches/`). |
 | `src/styles/global.css` | Palette, typographie. |
 | `public/images/` | Images optimisées pour le web (1600 px max). |
 
 ## Publier une langue
 
 Traduire les libellés dans `src/i18n/ui.ts` et le contenu dans `src/content/<collection>/<langue>/`, puis ajouter la langue à `publishedLangs`.
+
+## Protection par mot de passe (avant l'ouverture au public)
+
+Tant que `src/config/protection.json` contient `"protection": true`, le site en ligne n'est pas public :
+
+- tout visiteur arrive sur la page d'attente `/bientot/` ;
+- le logo de cette page mène à `/acces`, où l'on saisit le mot de passe (variable Vercel **`SITE_PASSWORD`**) ; l'accès reste ouvert 30 jours sur ce navigateur ;
+- pages, images, sons et plan du site sont inaccessibles sans ce passage ; `/robots.txt` interdit l'indexation ;
+- `/sortie` déconnecte.
+
+La protection est un middleware Vercel (`scripts/protection/middleware.js`) ajouté après `astro build` par `scripts/protection/install.mjs`. Elle ne s'applique pas à `npm run dev`. Tests : `npm run test:protection`. Sans `SITE_PASSWORD`, personne ne peut entrer. Changer le mot de passe déconnecte tout le monde.
+
+**Ouvrir le site au public** : passer `"protection": false`, commiter, pousser.
 
 ## Déploiement
 
@@ -41,4 +54,5 @@ Le site est statique, sauf `/api/contact` ([src/pages/api/contact.ts](src/pages/
 |---|---|
 | `RESEND_API_KEY` | Clé API Resend (secrète) |
 | `CONTACT_TO` | Adresse(s) qui reçoivent les messages |
+| `SITE_PASSWORD` | Mot de passe d'accès tant que la protection est active |
 | `CONTACT_FROM` | Expéditeur ; par défaut `onboarding@resend.dev`, à remplacer par une adresse `@memoires-sousse.org` une fois le domaine vérifié dans Resend |
